@@ -1,6 +1,6 @@
 import com.dslexample.util.StepsUtil
 
-String basePath = 'example5'
+String basePath = 'test3'
 
 folder(basePath) {
     description 'This example shows how to pull out common components into static methods.'

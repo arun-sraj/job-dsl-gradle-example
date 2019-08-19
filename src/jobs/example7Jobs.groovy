@@ -1,6 +1,6 @@
 import com.dslexample.builder.GradleCiJobBuilder
 
-String basePath = 'example7'
+String basePath = 'test1'
 List developers = ['dev1@example.com', 'dev2@example.com']
 
 folder(basePath) {
