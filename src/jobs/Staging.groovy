@@ -132,7 +132,7 @@ folder("chef-setup-staging") {
         }
     }
 }
-job("agent-staging") {
+job("chef-setup-staging/agent-staging") {
     description("Job for deploying agent service for the staging environment.")
     keepDependencies(false)
     disabled(false)
@@ -167,7 +167,7 @@ job("agent-staging") {
     }
 }
 
-job("auth-staging") {
+job("chef-setup-staging/auth-staging") {
     description("Deploy Chef cookbooks for staging environment using")
     keepDependencies(false)
     disabled(false)
@@ -202,7 +202,7 @@ job("auth-staging") {
     }
 }
 
-job("glusterfs-staging") {
+job("chef-setup-staging/glusterfs-staging") {
     description("Job for deploying glusterfs service for the staging environment.")
     keepDependencies(false)
     disabled(true)
@@ -237,7 +237,7 @@ job("glusterfs-staging") {
     }
 }
 
-job("ifc-staging") {
+job("chef-setup-staging/ifc-staging") {
     description("Deploy Chef cookbooks of staging environment for ifc servers")
     keepDependencies(false)
     disabled(false)
@@ -272,7 +272,7 @@ job("ifc-staging") {
     }
 }
 
-job("mq-app-staging") {
+job("chef-setup-staging/mq-app-staging") {
     description("Deploy Chef cookbooks for staging environment using")
     keepDependencies(false)
     disabled(false)
@@ -304,7 +304,7 @@ job("mq-app-staging") {
     }
 }
 
-job("mq-staging") {
+job("chef-setup-staging/mq-staging") {
     description("Job for deploying mq service for the staging environment.")
     keepDependencies(false)
     disabled(false)
@@ -339,7 +339,7 @@ job("mq-staging") {
     }
 }
 
-job("pms-staging") {
+job("chef-setup-staging/pms-staging") {
     description("Deploy Chef cookbooks for staging environment using")
     keepDependencies(false)
     disabled(false)
@@ -374,7 +374,7 @@ job("pms-staging") {
     }
 }
 
-job("postfix-staging") {
+job("chef-setup-staging/postfix-staging") {
     description("Job for deploying postfix service for the staging environment.")
     keepDependencies(false)
     disabled(false)
@@ -409,7 +409,7 @@ job("postfix-staging") {
     }
 }
 
-job("webhook-staging") {
+job("chef-setup-staging/webhook-staging") {
     description("Deploy Chef cookbooks for staging environment using")
     keepDependencies(false)
     disabled(false)
