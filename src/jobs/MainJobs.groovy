@@ -33,6 +33,10 @@ job("aws-account-setup") {
     }
 }
 
+folder(basePath) {
+    description 'This includes all the job to create the base image.'
+}
+
 job("base-image-creator/ubuntu-16-04-base-image-creator") {
     description("This job will create the patched image of latest ubuntu 16.04 os.")
     keepDependencies(false)
