@@ -33,7 +33,7 @@ job("aws-account-setup") {
     }
 }
 
-folder(basePath) {
+folder("base-image-creator") {
     description 'This includes all the job to create the base image.'
 }
 
