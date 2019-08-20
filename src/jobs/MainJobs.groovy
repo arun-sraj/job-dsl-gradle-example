@@ -1,3 +1,4 @@
+
 job("aws-account-setup") {
     description("""This job will configure the AWS account
 """)
@@ -32,3 +33,25 @@ job("aws-account-setup") {
     }
 }
 
+job("base-image-creator/ubuntu-16-04-base-image-creator") {
+    description("This job will create the patched image of latest ubuntu 16.04 os.")
+    keepDependencies(false)
+    parameters {
+        stringParam("IMAGE_ID", "", "To ask the job to use specific AMI. if not specified then it will take the latest ubuntu 16.04.")
+        stringParam("EC2_KEY_PAIR", "ChefWorkStationJenkinsSlave", "")
+        stringParam("INSTANCE_TYPE", "t2.small", "")
+        stringParam("OTHER_COMMANDS", "", "The commands (other than sudo apt-get update and sudo apt-get upgrade) that should be executed during the instance patch process")
+        stringParam("AWS_REGION", "us-east-1", "")
+    }
+    disabled(false)
+    concurrentBuild(false)
+    steps {
+        shell("bash ./StayNTouch/base-image-creator/create-base-image.sh")
+    }
+    configure {
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+            'autoRebuild'('false')
+            'rebuildDisabled'('false')
+        }
+    }
+}
