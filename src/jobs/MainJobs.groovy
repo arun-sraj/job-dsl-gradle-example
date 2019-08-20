@@ -445,3 +445,39 @@ Eg: nova, ohio""")
         }
     }
 }
+
+listView('StayNTouch') {
+    description('All root jobs for project A')
+    filterBuildQueue()
+    filterExecutors()
+    jobs {
+        names('aws-account-setup', 'base-image-creator', 'chef-setup')
+    }
+    columns {
+        status()
+        weather()
+        name()
+        lastSuccess()
+        lastFailure()
+        lastDuration()
+        buildButton()
+    }
+}
+
+listView('awsstage') {
+    description('All root jobs for project A')
+    filterBuildQueue()
+    filterExecutors()
+    jobs {
+        names('aws-account-setup-staging', 'chef-setup-staging')
+    }
+    columns {
+        status()
+        weather()
+        name()
+        lastSuccess()
+        lastFailure()
+        lastDuration()
+        buildButton()
+    }
+}
