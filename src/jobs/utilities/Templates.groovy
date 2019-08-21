@@ -1,6 +1,6 @@
 package utilities
 class Templates {
-  def ConfigureJobs(String environment) {
+  static void ConfigureJobs(String environment) {
     job("aws-account-setup-${environment}") {
         description()
         keepDependencies(false)
