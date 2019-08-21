@@ -2,7 +2,7 @@ package utilities
 class Templates {
   static void awsAccountSetup(def job, String environment) {
       job.with {
-          description('Arbitrary feature $environment')
+          description("Arbitrary feature $environment")
           keepDependencies(false)
           disabled(false)
           concurrentBuild(false)
