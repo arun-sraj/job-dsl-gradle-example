@@ -1,7 +1,7 @@
 package utilities
 class Templates {
   static void ConfigureJobs(String environment) {
-    def myJob = job('example-$environment')
+    def myJob = job('example')
     addMyFeature(myJob)
   }
   static void addMyFeature(def job) {
