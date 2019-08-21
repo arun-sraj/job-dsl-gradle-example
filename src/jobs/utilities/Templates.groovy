@@ -1,12 +1,8 @@
 package utilities
 class Templates {
-  // static void ConfigureJobs(String environment) {
-  //   def myJob = job('example-${environment}')
-  //   addMyFeature(myJob)
-  // }
-  static void addMyFeature(def job) {
+  static void awsAccountSetup(def job, String environment) {
       job.with {
-          description('Arbitrary feature')
+          description('Arbitrary feature ${environment}')
           keepDependencies(false)
           disabled(false)
           concurrentBuild(false)
