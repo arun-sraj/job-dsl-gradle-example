@@ -1,7 +1,8 @@
-String currentDir = new File(".").getAbsolutePath();
-println "${currentDir}"
 
-evaluate(readFileFromWorkspace("src/jobs/Templates.groovy").toString())
+import utilities.MyUtilities
 
-def template = new Templates()
-template.ConfigureJobs("release")
+// evaluate(readFileFromWorkspace("src/jobs/Templates.groovy"))
+
+// def template = new Templates()
+// template.ConfigureJobs("release")
+MyUtilities.ConfigureJobs("release")
