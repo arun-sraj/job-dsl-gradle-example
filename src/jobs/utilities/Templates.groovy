@@ -1,5 +1,5 @@
 package utilities
-class MyUtilities {
+class Templates {
   def ConfigureJobs(String environment) {
     job("aws-account-setup-${environment}") {
         description()

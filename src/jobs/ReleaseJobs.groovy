@@ -5,4 +5,4 @@ import utilities.Templates
 
 // def template = new Templates()
 // template.ConfigureJobs("release")
-MyUtilities.ConfigureJobs("release")
+Templates.ConfigureJobs("release")
