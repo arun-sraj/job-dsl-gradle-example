@@ -1,5 +1,5 @@
 
-import utilities.MyUtilities
+import utilities.Templates
 
 // evaluate(readFileFromWorkspace("src/jobs/Templates.groovy"))
 
