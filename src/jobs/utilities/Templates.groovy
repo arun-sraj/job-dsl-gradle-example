@@ -1,7 +1,8 @@
 package utilities
 class Templates {
-  static void awsAccountSetup(def job, String environment) {
-      job.with {
+  static void awsAccountSetup(String environment) {
+      def myJob = job('example')
+      myJob.with {
           description("Arbitrary feature $environment")
           keepDependencies(false)
           disabled(false)
