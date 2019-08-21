@@ -174,7 +174,7 @@ job("chef-setup-staging/auth-staging") {
     concurrentBuild(false)
     steps {
         downstreamParameterized {
-            trigger("") {
+            trigger("../chef-setup/auth") {
                 block {
                     buildStepFailure("FAILURE")
                     unstable("UNSTABLE")
