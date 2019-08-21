@@ -1,39 +1,39 @@
 def ConfigureJobs(String environment) {
     println "myUtilityMethod running with: ${environment}"
-  // job("aws-account-setup-${environment}") {
-  //     description()
-  //     keepDependencies(false)
-  //     disabled(false)
-  //     concurrentBuild(false)
-  //     steps {
-  //         downstreamParameterized {
-  //             trigger("") {
-  //                 block {
-  //                     buildStepFailure("FAILURE")
-  //                     unstable("UNSTABLE")
-  //                     failure("FAILURE")
-  //                 }
-  //             }
-  //         }
-  //     }
-  //     publishers {
-  //         mailer("devops@stayntouch.com", false, true)
-  //     }
-  //     configure {
-  //         it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
-  //             strategy {
-  //                 'daysToKeep'('3')
-  //                 'numToKeep'('-1')
-  //                 'artifactDaysToKeep'('-1')
-  //                 'artifactNumToKeep'('-1')
-  //             }
-  //         }
-  //         it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
-  //             'autoRebuild'('false')
-  //             'rebuildDisabled'('false')
-  //         }
-  //     }
-  // }
+  job("aws-account-setup-${environment}") {
+      description()
+      keepDependencies(false)
+      disabled(false)
+      concurrentBuild(false)
+      steps {
+          downstreamParameterized {
+              trigger("") {
+                  block {
+                      buildStepFailure("FAILURE")
+                      unstable("UNSTABLE")
+                      failure("FAILURE")
+                  }
+              }
+          }
+      }
+      publishers {
+          mailer("devops@stayntouch.com", false, true)
+      }
+      configure {
+          it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+              strategy {
+                  'daysToKeep'('3')
+                  'numToKeep'('-1')
+                  'artifactDaysToKeep'('-1')
+                  'artifactNumToKeep'('-1')
+              }
+          }
+          it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+              'autoRebuild'('false')
+              'rebuildDisabled'('false')
+          }
+      }
+  }
 
   // //chef setup
 
