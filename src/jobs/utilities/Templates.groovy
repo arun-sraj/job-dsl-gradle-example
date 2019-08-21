@@ -3,12 +3,13 @@ class Templates {
   static void ConfigureJobs(String environment) {
     def myJob = job('example-${environment}')
     addMyFeature(myJob)
-    static void addMyFeature(def job) {
-        job.with {
-            description('Arbitrary feature')
-        }
-    }
-
+  }
+  static void addMyFeature(def job) {
+      job.with {
+          description('Arbitrary feature')
+      }
+  }
+  }
     // job("aws-account-setup-${environment}") {
     //     description()
     //     keepDependencies(false)
@@ -454,5 +455,5 @@ class Templates {
     //     }
     // }
 
-  }
-}
+//   }
+// }
