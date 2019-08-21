@@ -6,4 +6,5 @@ import utilities.Templates
 // def template = new Templates()
 // template.ConfigureJobs("release")
 //Templates.ConfigureJobs("release")
-Templates.awsAccountSetup('test')
+def myJob = job('example')
+Templates.awsAccountSetup(myJob, 'test')
