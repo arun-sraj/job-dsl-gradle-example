@@ -1,4 +1,4 @@
-evaluate(new File("./Templates.groovy"))
+evaluate(new File("src/jobs/Templates.groovy"))
 
 def template = new Templates()
 template.ConfigureJobs("release")
