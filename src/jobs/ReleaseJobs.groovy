@@ -5,4 +5,4 @@ String environment = 'release'
 
 //Account setup job
 def awsAccountSetupJob = job('"aws-account-setup-$environment"')
-Templates.awsAccountSetup(myJob, "$environment")
+Templates.awsAccountSetup(awsAccountSetupJob, "$environment")
