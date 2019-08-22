@@ -42,3 +42,20 @@ Templates.postfixChefSetup(postfixChefSetupJob, "$environment")
 // Chef Setup webhook Server
 def webhookChefSetupJob = job("chef-setup-$environment/webhook-$environment")
 Templates.webhookChefSetup(webhookChefSetupJob, "$environment")
+
+listView("$environment") {
+    description("Jobs for the $environment environment")
+    filterBuildQueue()
+    filterExecutors()
+    jobs {
+        names('aws-account-setup-$environment', 'chef-setup-$environment')
+    }
+    columns {
+        status()
+        weather()
+        name()
+        lastSuccess()
+        lastFailure()
+        lastDuration()
+        buildButton()
+    }
