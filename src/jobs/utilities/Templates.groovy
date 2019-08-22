@@ -136,6 +136,7 @@ class Templates {
       }
     }
   }
+}
     // job("chef-setup-${environment}/agent-${environment}") {
     //     description("Job for deploying agent service for the staging environment.")
     //     keepDependencies(false)
