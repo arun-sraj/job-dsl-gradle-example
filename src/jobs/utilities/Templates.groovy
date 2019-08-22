@@ -70,7 +70,7 @@ class Templates {
               filterBuildQueue()
               filterExecutors()
               jobs {
-                  names("postfix-$environment", "mq-app-$environment", "mq-$environment", "glusterfs-$environment", " agent-$environment")
+                  names("postfix-$environment", "mq-app-$environment", "mq-$environment", "glusterfs-$environment", "agent-$environment")
               }
               columns {
                   status()
