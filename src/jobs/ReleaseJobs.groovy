@@ -1,10 +1,8 @@
 
 import utilities.Templates
 
-// evaluate(readFileFromWorkspace("src/jobs/Templates.groovy"))
+String environment = 'release'
 
-// def template = new Templates()
-// template.ConfigureJobs("release")
-//Templates.ConfigureJobs("release")
-def myJob = job('example')
-Templates.awsAccountSetup(myJob, 'test')
+//Account setup job
+def awsAccountSetupJob = job('"aws-account-setup-$environment"')
+Templates.awsAccountSetup(myJob, "$environment")
