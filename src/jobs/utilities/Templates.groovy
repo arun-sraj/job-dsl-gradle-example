@@ -136,42 +136,43 @@ class Templates {
       }
     }
   }
-}
-    // job("chef-setup-${environment}/agent-${environment}") {
-    //     description("Job for deploying agent service for the staging environment.")
-    //     keepDependencies(false)
-    //     disabled(false)
-    //     concurrentBuild(false)
-    //     steps {
-    //         downstreamParameterized {
-    //             trigger("") {
-    //                 block {
-    //                     buildStepFailure("FAILURE")
-    //                     unstable("UNSTABLE")
-    //                     failure("FAILURE")
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     publishers {
-    //         mailer("devops@stayntouch.com", false, true)
-    //     }
-    //     configure {
-    //         it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
-    //             strategy {
-    //                 'daysToKeep'('3')
-    //                 'numToKeep'('-1')
-    //                 'artifactDaysToKeep'('-1')
-    //                 'artifactNumToKeep'('-1')
-    //             }
-    //         }
-    //         it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
-    //             'autoRebuild'('false')
-    //             'rebuildDisabled'('false')
-    //         }
-    //     }
-    // }
 
+  static void agentChefSetup(def job, String environment) {
+    job.with {
+      description("Job for deploying agent service for the staging environment.")
+      keepDependencies(false)
+      disabled(false)
+      concurrentBuild(false)
+      steps {
+          downstreamParameterized {
+              trigger("../chef-setup/agent") {
+                  block {
+                      buildStepFailure("FAILURE")
+                      unstable("UNSTABLE")
+                      failure("FAILURE")
+                  }
+              }
+          }
+      }
+      publishers {
+          mailer("devops@stayntouch.com", false, true)
+      }
+      configure {
+          it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+              strategy {
+                  'daysToKeep'('3')
+                  'numToKeep'('-1')
+                  'artifactDaysToKeep'('-1')
+                  'artifactNumToKeep'('-1')
+              }
+          }
+          it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+              'autoRebuild'('false')
+              'rebuildDisabled'('false')
+          }
+      }
+    }
+  }
     // job("chef-setup-${environment}/auth-${environment}") {
     //     description("Deploy Chef cookbooks for staging environment using")
     //     keepDependencies(false)
@@ -451,3 +452,4 @@ class Templates {
 
 //   }
 // }
+}
