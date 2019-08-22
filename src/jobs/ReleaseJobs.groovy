@@ -48,7 +48,7 @@ listView("$environment") {
     filterBuildQueue()
     filterExecutors()
     jobs {
-        names('aws-account-setup-$environment', 'chef-setup-$environment')
+        names("aws-account-setup-$environment", "chef-setup-$environment")
     }
     columns {
         status()
