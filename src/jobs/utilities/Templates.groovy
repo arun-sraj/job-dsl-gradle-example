@@ -70,7 +70,7 @@ class Templates {
               filterBuildQueue()
               filterExecutors()
               jobs {
-                  names("postfix-${environment}", "mq-app-${environment}", "mq-${environment}", "glusterfs-${environment}", " agent-${environment}")
+                  names("postfix-$environment", "mq-app-$environment", "mq-$environment", "glusterfs-$environment", " agent-$environment")
               }
               columns {
                   status()
@@ -87,7 +87,7 @@ class Templates {
               filterBuildQueue()
               filterExecutors()
               jobs {
-                  name("ifc-${environment}")
+                  name("ifc-$environment")
               }
               columns {
                   status()
@@ -104,7 +104,7 @@ class Templates {
               filterBuildQueue()
               filterExecutors()
               jobs {
-                  name("pms-${environment}")
+                  name("pms-$environment")
               }
               columns {
                   status()
@@ -121,7 +121,7 @@ class Templates {
               filterBuildQueue()
               filterExecutors()
               jobs {
-                  name("webhook-${environment}")
+                  name("webhook-$environment")
               }
               columns {
                   status()
@@ -173,7 +173,7 @@ class Templates {
       }
     }
   }
-    // job("chef-setup-${environment}/auth-${environment}") {
+    // job("chef-setup-$environment/auth-$environment") {
     //     description("Deploy Chef cookbooks for staging environment using")
     //     keepDependencies(false)
     //     disabled(false)
@@ -208,7 +208,7 @@ class Templates {
     //     }
     // }
 
-    // job("chef-setup-${environment}/glusterfs-${environment}") {
+    // job("chef-setup-$environment/glusterfs-$environment") {
     //     description("Job for deploying glusterfs service for the staging environment.")
     //     keepDependencies(false)
     //     disabled(true)
@@ -243,7 +243,7 @@ class Templates {
     //     }
     // }
 
-    // job("chef-setup-${environment}/ifc-${environment}") {
+    // job("chef-setup-$environment/ifc-$environment") {
     //     description("Deploy Chef cookbooks of staging environment for ifc servers")
     //     keepDependencies(false)
     //     disabled(false)
@@ -278,7 +278,7 @@ class Templates {
     //     }
     // }
 
-    // job("chef-setup-${environment}/mq-app-${environment}") {
+    // job("chef-setup-$environment/mq-app-$environment") {
     //     description("Deploy Chef cookbooks for staging environment using")
     //     keepDependencies(false)
     //     disabled(false)
@@ -310,7 +310,7 @@ class Templates {
     //     }
     // }
 
-    // job("chef-setup-${environment}/mq-${environment}") {
+    // job("chef-setup-$environment/mq-$environment") {
     //     description("Job for deploying mq service for the staging environment.")
     //     keepDependencies(false)
     //     disabled(false)
@@ -345,7 +345,7 @@ class Templates {
     //     }
     // }
 
-    // job("chef-setup-${environment}/pms-${environment}") {
+    // job("chef-setup-$environment/pms-$environment") {
     //     description("Deploy Chef cookbooks for staging environment using")
     //     keepDependencies(false)
     //     disabled(false)
@@ -380,7 +380,7 @@ class Templates {
     //     }
     // }
 
-    // job("chef-setup-${environment}/postfix-${environment}") {
+    // job("chef-setup-$environment/postfix-$environment") {
     //     description("Job for deploying postfix service for the staging environment.")
     //     keepDependencies(false)
     //     disabled(false)
@@ -415,7 +415,7 @@ class Templates {
     //     }
     // }
 
-    // job("chef-setup-${environment}/webhook-${environment}") {
+    // job("chef-setup-$environment/webhook-$environment") {
     //     description("Deploy Chef cookbooks for staging environment using")
     //     keepDependencies(false)
     //     disabled(false)
