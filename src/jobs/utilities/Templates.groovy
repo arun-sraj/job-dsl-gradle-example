@@ -38,7 +38,7 @@ class Templates {
   }
 
     //chef setup
-  static void awsAccountSetup(def folder, String environment) {
+  static void chefFolderSetup(def folder, String environment) {
     folder.with {
       description 'This job will replace all template instances with the latest Chef configuration.  We will need one job per env & application type.  The steps it will follow for each template type are: \
       Start new template instance \
