@@ -249,7 +249,7 @@ class Templates {
     }
   }
 
-  static void ifcChefSetupJob(def job, String environment) {
+  static void ifcChefSetup(def job, String environment) {
     job.with {
       description("Deploy Chef cookbooks of $environment environment for ifc servers")
       keepDependencies(false)
