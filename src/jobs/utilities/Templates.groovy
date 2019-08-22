@@ -38,6 +38,44 @@ class Templates {
   }
 
     //chef setup
+
+  static void agentChefSetup(def job, String environment) {
+    job.with {
+      description("Job for deploying agent service for the staging environment.")
+      keepDependencies(false)
+      disabled(false)
+      concurrentBuild(false)
+      steps {
+          downstreamParameterized {
+              trigger("../chef-setup/agent") {
+                  block {
+                      buildStepFailure("FAILURE")
+                      unstable("UNSTABLE")
+                      failure("FAILURE")
+                  }
+              }
+          }
+      }
+      publishers {
+          mailer("devops@stayntouch.com", false, true)
+      }
+      configure {
+          it / "properties" / "jenkins.model.BuildDiscarderProperty" {
+              strategy {
+                  "daysToKeep"("3")
+                  "numToKeep"("-1")
+                  "artifactDaysToKeep"("-1")
+                  "artifactNumToKeep"("-1")
+              }
+          }
+          it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
+              "autoRebuild"("false")
+              "rebuildDisabled"("false")
+          }
+      }
+    }
+  }
+
   static void chefFolderSetup(def folder, String environment) {
     folder.with {
       description "This job will replace all template instances with the latest Chef configuration.  We will need one job per env & application type.  The steps it will follow for each template type are: \
@@ -70,7 +108,7 @@ class Templates {
               filterBuildQueue()
               filterExecutors()
               jobs {
-                  names("postfix-$environment", "mq-app-$environment", "mq-$environment", "glusterfs-$environment", " agent-release")
+                  names("postfix-$environment", "mq-app-$environment", "mq-$environment", "glusterfs-$environment", " agent-$environment")
               }
               columns {
                   status()
@@ -132,43 +170,6 @@ class Templates {
                   lastDuration()
                   buildButton()
               }
-          }
-      }
-    }
-  }
-
-  static void agentChefSetup(def job, String environment) {
-    job.with {
-      description("Job for deploying agent service for the staging environment.")
-      keepDependencies(false)
-      disabled(false)
-      concurrentBuild(false)
-      steps {
-          downstreamParameterized {
-              trigger("../chef-setup/agent") {
-                  block {
-                      buildStepFailure("FAILURE")
-                      unstable("UNSTABLE")
-                      failure("FAILURE")
-                  }
-              }
-          }
-      }
-      publishers {
-          mailer("devops@stayntouch.com", false, true)
-      }
-      configure {
-          it / "properties" / "jenkins.model.BuildDiscarderProperty" {
-              strategy {
-                  "daysToKeep"("3")
-                  "numToKeep"("-1")
-                  "artifactDaysToKeep"("-1")
-                  "artifactNumToKeep"("-1")
-              }
-          }
-          it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
-              "autoRebuild"("false")
-              "rebuildDisabled"("false")
           }
       }
     }
