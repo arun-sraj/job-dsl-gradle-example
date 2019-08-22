@@ -21,17 +21,17 @@ class Templates {
           mailer("devops@stayntouch.com", false, true)
       }
       configure {
-          it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+          it / "properties" / "jenkins.model.BuildDiscarderProperty" {
               strategy {
-                  'daysToKeep'('3')
-                  'numToKeep'('-1')
-                  'artifactDaysToKeep'('-1')
-                  'artifactNumToKeep'('-1')
+                  "daysToKeep"("3")
+                  "numToKeep"("-1")
+                  "artifactDaysToKeep"("-1")
+                  "artifactNumToKeep"("-1")
               }
           }
-          it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
-              'autoRebuild'('false')
-              'rebuildDisabled'('false')
+          it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
+              "autoRebuild"("false")
+              "rebuildDisabled"("false")
           }
       }
     }
@@ -40,20 +40,20 @@ class Templates {
     //chef setup
   static void chefFolderSetup(def folder, String environment) {
     folder.with {
-      description 'This job will replace all template instances with the latest Chef configuration.  We will need one job per env & application type.  The steps it will follow for each template type are: \
+      description "This job will replace all template instances with the latest Chef configuration.  We will need one job per env & application type.  The steps it will follow for each template type are: \
       Start new template instance \
       Bootstrap it with Chef Server \
       Execute chef client to configure node (with startup scripts disabled / commented out) \
       Shutdown template instance \
       Take template image \
-      Terminate template instance'
+      Terminate template instance"
       views {
-          listView('auth') {
-              description('Auth chef setup jobs')
+          listView("auth") {
+              description("Auth chef setup jobs")
               filterBuildQueue()
               filterExecutors()
               jobs {
-                  name('auth-${environment}')
+                  name("auth-$environment")
               }
               columns {
                   status()
@@ -65,12 +65,12 @@ class Templates {
                   buildButton()
               }
           }
-          listView('general service') {
-              description('All general service jobs')
+          listView("general service") {
+              description("All general service jobs")
               filterBuildQueue()
               filterExecutors()
               jobs {
-                  names('postfix-${environment}', 'mq-app-${environment}', 'mq-${environment}', 'glusterfs-${environment}', ' agent-${environment}')
+                  names("postfix-${environment}", "mq-app-${environment}", "mq-${environment}", "glusterfs-${environment}", " agent-${environment}")
               }
               columns {
                   status()
@@ -82,12 +82,12 @@ class Templates {
                   buildButton()
               }
           }
-          listView('ifc') {
-              description('ifc chef setup jobs')
+          listView("ifc") {
+              description("ifc chef setup jobs")
               filterBuildQueue()
               filterExecutors()
               jobs {
-                  name('ifc-${environment}')
+                  name("ifc-${environment}")
               }
               columns {
                   status()
@@ -99,12 +99,12 @@ class Templates {
                   buildButton()
               }
           }
-          listView('pms') {
-              description('pms chef setup jobs')
+          listView("pms") {
+              description("pms chef setup jobs")
               filterBuildQueue()
               filterExecutors()
               jobs {
-                  name('pms-${environment}')
+                  name("pms-${environment}")
               }
               columns {
                   status()
@@ -116,12 +116,12 @@ class Templates {
                   buildButton()
               }
           }
-          listView('webhook') {
-              description('webhook chef setup jobs')
+          listView("webhook") {
+              description("webhook chef setup jobs")
               filterBuildQueue()
               filterExecutors()
               jobs {
-                  name('webhook-${environment}')
+                  name("webhook-${environment}")
               }
               columns {
                   status()
@@ -158,17 +158,17 @@ class Templates {
           mailer("devops@stayntouch.com", false, true)
       }
       configure {
-          it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+          it / "properties" / "jenkins.model.BuildDiscarderProperty" {
               strategy {
-                  'daysToKeep'('3')
-                  'numToKeep'('-1')
-                  'artifactDaysToKeep'('-1')
-                  'artifactNumToKeep'('-1')
+                  "daysToKeep"("3")
+                  "numToKeep"("-1")
+                  "artifactDaysToKeep"("-1")
+                  "artifactNumToKeep"("-1")
               }
           }
-          it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
-              'autoRebuild'('false')
-              'rebuildDisabled'('false')
+          it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
+              "autoRebuild"("false")
+              "rebuildDisabled"("false")
           }
       }
     }
@@ -193,17 +193,17 @@ class Templates {
     //         mailer("devops@stayntouch.com", false, true)
     //     }
     //     configure {
-    //         it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+    //         it / "properties" / "jenkins.model.BuildDiscarderProperty" {
     //             strategy {
-    //                 'daysToKeep'('3')
-    //                 'numToKeep'('-1')
-    //                 'artifactDaysToKeep'('-1')
-    //                 'artifactNumToKeep'('-1')
+    //                 "daysToKeep"("3")
+    //                 "numToKeep"("-1")
+    //                 "artifactDaysToKeep"("-1")
+    //                 "artifactNumToKeep"("-1")
     //             }
     //         }
-    //         it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
-    //             'autoRebuild'('false')
-    //             'rebuildDisabled'('false')
+    //         it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
+    //             "autoRebuild"("false")
+    //             "rebuildDisabled"("false")
     //         }
     //     }
     // }
@@ -228,17 +228,17 @@ class Templates {
     //         mailer("devops@stayntouch.com", false, true)
     //     }
     //     configure {
-    //         it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+    //         it / "properties" / "jenkins.model.BuildDiscarderProperty" {
     //             strategy {
-    //                 'daysToKeep'('3')
-    //                 'numToKeep'('-1')
-    //                 'artifactDaysToKeep'('-1')
-    //                 'artifactNumToKeep'('-1')
+    //                 "daysToKeep"("3")
+    //                 "numToKeep"("-1")
+    //                 "artifactDaysToKeep"("-1")
+    //                 "artifactNumToKeep"("-1")
     //             }
     //         }
-    //         it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
-    //             'autoRebuild'('false')
-    //             'rebuildDisabled'('false')
+    //         it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
+    //             "autoRebuild"("false")
+    //             "rebuildDisabled"("false")
     //         }
     //     }
     // }
@@ -263,17 +263,17 @@ class Templates {
     //         mailer("devops@stayntouch.com", false, true)
     //     }
     //     configure {
-    //         it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+    //         it / "properties" / "jenkins.model.BuildDiscarderProperty" {
     //             strategy {
-    //                 'daysToKeep'('3')
-    //                 'numToKeep'('-1')
-    //                 'artifactDaysToKeep'('-1')
-    //                 'artifactNumToKeep'('-1')
+    //                 "daysToKeep"("3")
+    //                 "numToKeep"("-1")
+    //                 "artifactDaysToKeep"("-1")
+    //                 "artifactNumToKeep"("-1")
     //             }
     //         }
-    //         it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
-    //             'autoRebuild'('false')
-    //             'rebuildDisabled'('false')
+    //         it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
+    //             "autoRebuild"("false")
+    //             "rebuildDisabled"("false")
     //         }
     //     }
     // }
@@ -295,17 +295,17 @@ class Templates {
     //         }
     //     }
     //     configure {
-    //         it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+    //         it / "properties" / "jenkins.model.BuildDiscarderProperty" {
     //             strategy {
-    //                 'daysToKeep'('3')
-    //                 'numToKeep'('-1')
-    //                 'artifactDaysToKeep'('-1')
-    //                 'artifactNumToKeep'('-1')
+    //                 "daysToKeep"("3")
+    //                 "numToKeep"("-1")
+    //                 "artifactDaysToKeep"("-1")
+    //                 "artifactNumToKeep"("-1")
     //             }
     //         }
-    //         it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
-    //             'autoRebuild'('false')
-    //             'rebuildDisabled'('false')
+    //         it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
+    //             "autoRebuild"("false")
+    //             "rebuildDisabled"("false")
     //         }
     //     }
     // }
@@ -330,17 +330,17 @@ class Templates {
     //         mailer("devops@stayntouch.com", false, true)
     //     }
     //     configure {
-    //         it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+    //         it / "properties" / "jenkins.model.BuildDiscarderProperty" {
     //             strategy {
-    //                 'daysToKeep'('3')
-    //                 'numToKeep'('-1')
-    //                 'artifactDaysToKeep'('-1')
-    //                 'artifactNumToKeep'('-1')
+    //                 "daysToKeep"("3")
+    //                 "numToKeep"("-1")
+    //                 "artifactDaysToKeep"("-1")
+    //                 "artifactNumToKeep"("-1")
     //             }
     //         }
-    //         it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
-    //             'autoRebuild'('false')
-    //             'rebuildDisabled'('false')
+    //         it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
+    //             "autoRebuild"("false")
+    //             "rebuildDisabled"("false")
     //         }
     //     }
     // }
@@ -365,17 +365,17 @@ class Templates {
     //         mailer("devops@stayntouch.com", false, true)
     //     }
     //     configure {
-    //         it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+    //         it / "properties" / "jenkins.model.BuildDiscarderProperty" {
     //             strategy {
-    //                 'daysToKeep'('3')
-    //                 'numToKeep'('-1')
-    //                 'artifactDaysToKeep'('-1')
-    //                 'artifactNumToKeep'('-1')
+    //                 "daysToKeep"("3")
+    //                 "numToKeep"("-1")
+    //                 "artifactDaysToKeep"("-1")
+    //                 "artifactNumToKeep"("-1")
     //             }
     //         }
-    //         it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
-    //             'autoRebuild'('false')
-    //             'rebuildDisabled'('false')
+    //         it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
+    //             "autoRebuild"("false")
+    //             "rebuildDisabled"("false")
     //         }
     //     }
     // }
@@ -400,17 +400,17 @@ class Templates {
     //         mailer("devops@stayntouch.com", false, true)
     //     }
     //     configure {
-    //         it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+    //         it / "properties" / "jenkins.model.BuildDiscarderProperty" {
     //             strategy {
-    //                 'daysToKeep'('3')
-    //                 'numToKeep'('-1')
-    //                 'artifactDaysToKeep'('-1')
-    //                 'artifactNumToKeep'('-1')
+    //                 "daysToKeep"("3")
+    //                 "numToKeep"("-1")
+    //                 "artifactDaysToKeep"("-1")
+    //                 "artifactNumToKeep"("-1")
     //             }
     //         }
-    //         it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
-    //             'autoRebuild'('false')
-    //             'rebuildDisabled'('false')
+    //         it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
+    //             "autoRebuild"("false")
+    //             "rebuildDisabled"("false")
     //         }
     //     }
     // }
@@ -435,17 +435,17 @@ class Templates {
     //         mailer("devops@stayntouch.com", false, true)
     //     }
     //     configure {
-    //         it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+    //         it / "properties" / "jenkins.model.BuildDiscarderProperty" {
     //             strategy {
-    //                 'daysToKeep'('3')
-    //                 'numToKeep'('-1')
-    //                 'artifactDaysToKeep'('-1')
-    //                 'artifactNumToKeep'('-1')
+    //                 "daysToKeep"("3")
+    //                 "numToKeep"("-1")
+    //                 "artifactDaysToKeep"("-1")
+    //                 "artifactNumToKeep"("-1")
     //             }
     //         }
-    //         it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
-    //             'autoRebuild'('false')
-    //             'rebuildDisabled'('false')
+    //         it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
+    //             "autoRebuild"("false")
+    //             "rebuildDisabled"("false")
     //         }
     //     }
     // }
