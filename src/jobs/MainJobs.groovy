@@ -446,30 +446,12 @@ Eg: nova, ohio""")
     }
 }
 
-listView('StayNTouch') {
-    description('All root jobs for project A')
-    filterBuildQueue()
-    filterExecutors()
-    jobs {
-        names('aws-account-setup', 'base-image-creator', 'chef-setup')
-    }
-    columns {
-        status()
-        weather()
-        name()
-        lastSuccess()
-        lastFailure()
-        lastDuration()
-        buildButton()
-    }
-}
-
 // Custvpn service setup.
 folder("custvpn") {
     description 'Custom VPN for ipsec connection.'
 }
 
-job("custvpn-server-setup") {
+job("custvpn/custvpn-server-setup") {
     description("""#1. Create server for IPsec VPN \
     #2. Adding customer subnets to the route tables. \
     #2. Deploy chef in it \
@@ -498,6 +480,26 @@ job("custvpn-server-setup") {
             'autoRebuild'('false')
             'rebuildDisabled'('false')
         }
+    }
+}
+
+// Main view StyaNTouch
+
+listView('StayNTouch') {
+    description('All root jobs for project A')
+    filterBuildQueue()
+    filterExecutors()
+    jobs {
+        names('aws-account-setup', 'base-image-creator', 'chef-setup', 'custvpn')
+    }
+    columns {
+        status()
+        weather()
+        name()
+        lastSuccess()
+        lastFailure()
+        lastDuration()
+        buildButton()
     }
 }
 
