@@ -221,7 +221,7 @@ class Templates {
       }
       else
       {
-        def job = null
+        job = null
       }
   }
 
