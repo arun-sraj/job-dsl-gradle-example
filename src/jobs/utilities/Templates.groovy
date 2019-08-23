@@ -48,7 +48,7 @@ class Templates {
       Take template image \
       Terminate template instance"
       views {
-        if( $environment != "prodtest")
+        if( "$environment" != "prodtest")
         {
           listView("auth") {
             description("Auth chef setup jobs")
@@ -180,7 +180,7 @@ class Templates {
   }
 
   static void authChefSetup(def job, String environment) {
-    if( $environment != "prodtest")
+    if( "$environment" != "prodtest")
       {
         job.with {
           description("Deploy Chef cookbooks for $environment environment.")
@@ -221,7 +221,7 @@ class Templates {
 
 
   static void glusterfsChefSetup(def job, String environment) {
-    if( $environment != "prodtest")
+    if( "$environment" != "prodtest")
       {
         job.with {
           description("Job for deploying glusterfs service for the $environment environment.")
@@ -261,7 +261,7 @@ class Templates {
   }
 
   static void ifcChefSetup(def job, String environment) {
-    if( $environment != "prodtest")
+    if( "$environment" != "prodtest")
       {
         job.with {
           description("Deploy Chef cookbooks of $environment environment for ifc servers")
@@ -374,7 +374,7 @@ class Templates {
   }
 
   static void postfixChefSetup(def job, String environment) {
-    if( $environment != "prodtest")
+    if( "$environment" != "prodtest")
       {
         job.with {
           description("Job for deploying postfix service for the $environment environment.")
@@ -414,7 +414,7 @@ class Templates {
   }
 
   static void webhookChefSetup(def job, String environment) {
-    if( $environment != "prodtest")
+    if( "$environment" != "prodtest")
       {
         job.with {
           description("Deploy Chef cookbooks for $environment environment using")
