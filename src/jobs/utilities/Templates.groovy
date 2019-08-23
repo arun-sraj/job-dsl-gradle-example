@@ -3,10 +3,6 @@ import jenkins.model.Jenkins
 import hudson.model.Job
 class Templates {
   static void awsAccountSetup(def job, String environment) {
-    job("aws-account-setup-test")
-    {
-      description("Account serup job for environment test")
-    }
     job.with {
       description("Account serup job for environment $environment")
       keepDependencies(false)
@@ -222,6 +218,10 @@ class Templates {
             }
           }
         }
+      }
+      else
+      {
+        def job = null
       }
   }
 
