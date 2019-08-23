@@ -463,3 +463,42 @@ listView('StayNTouch') {
         buildButton()
     }
 }
+
+// Custvpn service setup.
+folder("custvpn") {
+    description 'Custom VPN for ipsec connection.'
+}
+
+job("custvpn-server-setup") {
+    description("""#1. Create server for IPsec VPN \
+    #2. Adding customer subnets to the route tables. \
+    #2. Deploy chef in it \
+    """)
+    keepDependencies(false)
+    parameters {
+        stringParam("BRANCH", "develop", "Specify github branch name to deploy")
+        stringParam("ENVIRONMENT", "staging", """Specify environment name Eg: staging, release, uat""")
+        stringParam("SITE", "nova", """Specify site name Eg: nova, ohio""")
+    }
+    disabled(false)
+    concurrentBuild(true)
+    steps {
+        shell("bash ./StayNTouch/custvpn-server/custvpn-server-setup.sh")
+    }
+    configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+            strategy {
+                'daysToKeep'('3')
+                'numToKeep'('-1')
+                'artifactDaysToKeep'('-1')
+                'artifactNumToKeep'('-1')
+            }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+            'autoRebuild'('false')
+            'rebuildDisabled'('false')
+        }
+    }
+}
+
+
