@@ -217,6 +217,10 @@ class Templates {
           }
         }
       }
+      else
+      {
+        job.delete()
+      }
   }
 
 
@@ -258,6 +262,10 @@ class Templates {
           }
         }
       }
+      else
+      {
+        job.delete()
+      }
   }
 
   static void ifcChefSetup(def job, String environment) {
@@ -297,6 +305,10 @@ class Templates {
             }
           }
         }
+      }
+      else
+      {
+        job.delete()
       }
   }
 
@@ -411,6 +423,10 @@ class Templates {
           }
         }
       }
+      else
+      {
+        job.delete()
+      }
   }
 
   static void webhookChefSetup(def job, String environment) {
@@ -450,6 +466,10 @@ class Templates {
             }
           }
         }
+      }
+      else
+      {
+        job.delete()
       }
   }
 }
