@@ -2,6 +2,7 @@
 import utilities.Templates
 
 def environmentlist = ["release", "uat", "prodtest"]
+
 for (environment in environmentlist) {
   // Account Setup Job
   def awsAccountSetupJob = job("aws-account-setup-$environment")
@@ -16,16 +17,25 @@ for (environment in environmentlist) {
   Templates.agentChefSetup(agentChefSetupJob, "$environment")
 
   // Chef Setup auth Server
-  def authChefSetupJob = job("chef-setup-$environment/auth-$environment")
-  Templates.authChefSetup(authChefSetupJob, "$environment")
+  if(!environment.equals("prodtest"))
+  {
+    def authChefSetupJob = job("chef-setup-$environment/auth-$environment")
+    Templates.authChefSetup(authChefSetupJob, "$environment")
+  }
 
   // Chef Setup glusterfs Server
-  def glusterfsChefSetupJob = job("chef-setup-$environment/glusterfs-$environment")
-  Templates.glusterfsChefSetup(glusterfsChefSetupJob, "$environment")
+  if(!environment.equals("prodtest"))
+  {
+    def glusterfsChefSetupJob = job("chef-setup-$environment/glusterfs-$environment")
+    Templates.glusterfsChefSetup(glusterfsChefSetupJob, "$environment")
+  }
 
   // Chef Setup ifc Server
-  def ifcChefSetupJob = job("chef-setup-$environment/ifc-$environment")
-  Templates.ifcChefSetup(ifcChefSetupJob, "$environment")
+  if(!environment.equals("prodtest"))
+  {
+    def ifcChefSetupJob = job("chef-setup-$environment/ifc-$environment")
+    Templates.ifcChefSetup(ifcChefSetupJob, "$environment")
+  }
 
   // Chef Setup mq Server
   def mqChefSetupJob = job("chef-setup-$environment/mq-$environment")
@@ -36,12 +46,18 @@ for (environment in environmentlist) {
   Templates.pmsChefSetup(pmsChefSetupJob, "$environment")
 
   // Chef Setup postfix Server
-  def postfixChefSetupJob = job("chef-setup-$environment/postfix-$environment")
-  Templates.postfixChefSetup(postfixChefSetupJob, "$environment")
+  if(!environment.equals("prodtest"))
+  {
+    def postfixChefSetupJob = job("chef-setup-$environment/postfix-$environment")
+    Templates.postfixChefSetup(postfixChefSetupJob, "$environment")
+  }
 
   // Chef Setup webhook Server
-  def webhookChefSetupJob = job("chef-setup-$environment/webhook-$environment")
-  Templates.webhookChefSetup(webhookChefSetupJob, "$environment")
+  if(!environment.equals("prodtest"))
+  {
+    def webhookChefSetupJob = job("chef-setup-$environment/webhook-$environment")
+    Templates.webhookChefSetup(webhookChefSetupJob, "$environment")
+  }
 
   listView("$environment") {
       description("Jobs for the $environment environment")

@@ -182,128 +182,115 @@ class Templates {
   }
 
   static void authChefSetup(def job, String environment) {
-    if(!environment.equals("prodtest"))
-      {
-        job.with {
-          description("Deploy Chef cookbooks for $environment environment.")
-          keepDependencies(false)
-          disabled(false)
-          concurrentBuild(false)
-          steps {
-            downstreamParameterized {
-              trigger("../chef-setup/auth") {
-                block {
-                  buildStepFailure("FAILURE")
-                  unstable("UNSTABLE")
-                  failure("FAILURE")
-                }
-              }
-            }
-          }
-          publishers {
-            mailer("devops@stayntouch.com", false, true)
-          }
-          configure {
-            it / "properties" / "jenkins.model.BuildDiscarderProperty" {
-              strategy {
-                "daysToKeep"("3")
-                "numToKeep"("-1")
-                "artifactDaysToKeep"("-1")
-                "artifactNumToKeep"("-1")
-              }
-            }
-            it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
-              "autoRebuild"("false")
-              "rebuildDisabled"("false")
+    job.with {
+      description("Deploy Chef cookbooks for $environment environment.")
+      keepDependencies(false)
+      disabled(false)
+      concurrentBuild(false)
+      steps {
+        downstreamParameterized {
+          trigger("../chef-setup/auth") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
             }
           }
         }
       }
-      else
-      {
-        job = null
+      publishers {
+        mailer("devops@stayntouch.com", false, true)
       }
+      configure {
+        it / "properties" / "jenkins.model.BuildDiscarderProperty" {
+          strategy {
+            "daysToKeep"("3")
+            "numToKeep"("-1")
+            "artifactDaysToKeep"("-1")
+            "artifactNumToKeep"("-1")
+          }
+        }
+        it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
+          "autoRebuild"("false")
+          "rebuildDisabled"("false")
+        }
+      }
+    }
   }
 
 
   static void glusterfsChefSetup(def job, String environment) {
-    if(!environment.equals("prodtest"))
-      {
-        job.with {
-          description("Job for deploying glusterfs service for the $environment environment.")
-          keepDependencies(false)
-          disabled(true)
-          concurrentBuild(false)
-          steps {
-            downstreamParameterized {
-              trigger("../chef-setup/glusterfs") {
-                block {
-                  buildStepFailure("FAILURE")
-                  unstable("UNSTABLE")
-                  failure("FAILURE")
-                }
-              }
-            }
-          }
-          publishers {
-            mailer("devops@stayntouch.com", false, true)
-          }
-          configure {
-            it / "properties" / "jenkins.model.BuildDiscarderProperty" {
-              strategy {
-                "daysToKeep"("3")
-                "numToKeep"("-1")
-                "artifactDaysToKeep"("-1")
-                "artifactNumToKeep"("-1")
-              }
-            }
-            it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
-              "autoRebuild"("false")
-              "rebuildDisabled"("false")
+    job.with {
+      description("Job for deploying glusterfs service for the $environment environment.")
+      keepDependencies(false)
+      disabled(true)
+      concurrentBuild(false)
+      steps {
+        downstreamParameterized {
+          trigger("../chef-setup/glusterfs") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
             }
           }
         }
       }
+      publishers {
+        mailer("devops@stayntouch.com", false, true)
+      }
+      configure {
+        it / "properties" / "jenkins.model.BuildDiscarderProperty" {
+          strategy {
+            "daysToKeep"("3")
+            "numToKeep"("-1")
+            "artifactDaysToKeep"("-1")
+            "artifactNumToKeep"("-1")
+          }
+        }
+        it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
+          "autoRebuild"("false")
+          "rebuildDisabled"("false")
+        }
+      }
+    }
   }
 
   static void ifcChefSetup(def job, String environment) {
-    if(!environment.equals("prodtest"))
-      {
-        job.with {
-          description("Deploy Chef cookbooks of $environment environment for ifc servers")
-          keepDependencies(false)
-          disabled(false)
-          concurrentBuild(false)
-          steps {
-            downstreamParameterized {
-              trigger("../chef-setup/ifc") {
-                block {
-                  buildStepFailure("FAILURE")
-                  unstable("UNSTABLE")
-                  failure("FAILURE")
-                }
-              }
-            }
-          }
-          publishers {
-            mailer("devops@stayntouch.com", false, true)
-          }
-          configure {
-            it / "properties" / "jenkins.model.BuildDiscarderProperty" {
-              strategy {
-                "daysToKeep"("3")
-                "numToKeep"("-1")
-                "artifactDaysToKeep"("-1")
-                "artifactNumToKeep"("-1")
-              }
-            }
-            it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
-              "autoRebuild"("false")
-              "rebuildDisabled"("false")
+    job.with {
+      description("Deploy Chef cookbooks of $environment environment for ifc servers")
+      keepDependencies(false)
+      disabled(false)
+      concurrentBuild(false)
+      steps {
+        downstreamParameterized {
+          trigger("../chef-setup/ifc") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
             }
           }
         }
       }
+      publishers {
+        mailer("devops@stayntouch.com", false, true)
+      }
+      configure {
+        it / "properties" / "jenkins.model.BuildDiscarderProperty" {
+          strategy {
+            "daysToKeep"("3")
+            "numToKeep"("-1")
+            "artifactDaysToKeep"("-1")
+            "artifactNumToKeep"("-1")
+          }
+        }
+        it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
+          "autoRebuild"("false")
+          "rebuildDisabled"("false")
+        }
+      }
+    }
   }
 
   static void mqChefSetup(def job, String environment) {
@@ -380,82 +367,76 @@ class Templates {
   }
 
   static void postfixChefSetup(def job, String environment) {
-    if(!environment.equals("prodtest"))
-      {
-        job.with {
-          description("Job for deploying postfix service for the $environment environment.")
-          keepDependencies(false)
-          disabled(false)
-          concurrentBuild(false)
-          steps {
-            downstreamParameterized {
-              trigger("../chef-setup/postfix") {
-                block {
-                  buildStepFailure("FAILURE")
-                  unstable("UNSTABLE")
-                  failure("FAILURE")
-                }
-              }
-            }
-          }
-          publishers {
-            mailer("devops@stayntouch.com", false, true)
-          }
-          configure {
-            it / "properties" / "jenkins.model.BuildDiscarderProperty" {
-              strategy {
-                "daysToKeep"("3")
-                "numToKeep"("-1")
-                "artifactDaysToKeep"("-1")
-                "artifactNumToKeep"("-1")
-              }
-            }
-            it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
-              "autoRebuild"("false")
-              "rebuildDisabled"("false")
+    job.with {
+      description("Job for deploying postfix service for the $environment environment.")
+      keepDependencies(false)
+      disabled(false)
+      concurrentBuild(false)
+      steps {
+        downstreamParameterized {
+          trigger("../chef-setup/postfix") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
             }
           }
         }
       }
+      publishers {
+        mailer("devops@stayntouch.com", false, true)
+      }
+      configure {
+        it / "properties" / "jenkins.model.BuildDiscarderProperty" {
+          strategy {
+            "daysToKeep"("3")
+            "numToKeep"("-1")
+            "artifactDaysToKeep"("-1")
+            "artifactNumToKeep"("-1")
+          }
+        }
+        it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
+          "autoRebuild"("false")
+          "rebuildDisabled"("false")
+        }
+      }
+    }
   }
 
   static void webhookChefSetup(def job, String environment) {
-    if(!environment.equals("prodtest"))
-      {
-        job.with {
-          description("Deploy Chef cookbooks for $environment environment using")
-          keepDependencies(false)
-          disabled(false)
-          concurrentBuild(false)
-          steps {
-            downstreamParameterized {
-              trigger("../chef-setup/webhook") {
-                block {
-                  buildStepFailure("FAILURE")
-                  unstable("UNSTABLE")
-                  failure("FAILURE")
-                }
-              }
-            }
-          }
-          publishers {
-            mailer("devops@stayntouch.com", false, true)
-          }
-          configure {
-            it / "properties" / "jenkins.model.BuildDiscarderProperty" {
-              strategy {
-                "daysToKeep"("3")
-                "numToKeep"("-1")
-                "artifactDaysToKeep"("-1")
-                "artifactNumToKeep"("-1")
-              }
-            }
-            it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
-              "autoRebuild"("false")
-              "rebuildDisabled"("false")
+    job.with {
+      description("Deploy Chef cookbooks for $environment environment using")
+      keepDependencies(false)
+      disabled(false)
+      concurrentBuild(false)
+      steps {
+        downstreamParameterized {
+          trigger("../chef-setup/webhook") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
             }
           }
         }
       }
+      publishers {
+        mailer("devops@stayntouch.com", false, true)
+      }
+      configure {
+        it / "properties" / "jenkins.model.BuildDiscarderProperty" {
+          strategy {
+            "daysToKeep"("3")
+            "numToKeep"("-1")
+            "artifactDaysToKeep"("-1")
+            "artifactNumToKeep"("-1")
+          }
+        }
+        it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
+          "autoRebuild"("false")
+          "rebuildDisabled"("false")
+        }
+      }
+    }
   }
 }
