@@ -219,9 +219,7 @@ class Templates {
       }
       else
       {
-        job.with {
-          job.delete()
-        }
+        job.delete()
       }
   }
 
@@ -266,9 +264,7 @@ class Templates {
       }
       else
       {
-        job.with {
-          job.delete()
-        }
+        job.delete()
       }
   }
 
@@ -312,9 +308,7 @@ class Templates {
       }
       else
       {
-        job.with {
-          job.delete()
-        }
+        job.delete()
       }
   }
 
@@ -431,9 +425,7 @@ class Templates {
       }
       else
       {
-        job.with {
-          job.delete()
-        }
+        job.delete()
       }
   }
 
@@ -477,9 +469,7 @@ class Templates {
       }
       else
       {
-        job.with {
-          job.delete()
-        }
+        job.delete()
       }
 
   }
