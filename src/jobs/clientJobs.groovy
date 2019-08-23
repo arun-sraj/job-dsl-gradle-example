@@ -1,7 +1,7 @@
 
 import utilities.Templates
 
-def environmentlist = ["release", "uat", "prodtest"]
+def environmentlist = ["release", "uat", "prodtest", "awsstage"]
 
 for (environment in environmentlist) {
   // Account Setup Job
