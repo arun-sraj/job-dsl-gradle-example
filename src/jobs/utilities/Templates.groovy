@@ -1,6 +1,9 @@
 package utilities
+import jenkins.model.Jenkins
+import hudson.model.Job
 class Templates {
   static void awsAccountSetup(def job, String environment) {
+    def awsAccountSetupJob = job("aws-account-setup-test")
     job.with {
       description("Account serup job for environment $environment")
       keepDependencies(false)
