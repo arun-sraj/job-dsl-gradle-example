@@ -220,11 +220,7 @@ class Templates {
       else
       {
         job.with {
-          steps {
-            dsl {
-              removeAction('DELETE')
-            }
-          }
+          job.delete()
         }
       }
   }
@@ -271,11 +267,7 @@ class Templates {
       else
       {
         job.with {
-          steps {
-            dsl {
-              removeAction('DELETE')
-            }
-          }
+          job.delete()
         }
       }
   }
@@ -321,11 +313,7 @@ class Templates {
       else
       {
         job.with {
-          steps {
-            dsl {
-              removeAction('DELETE')
-            }
-          }
+          job.delete()
         }
       }
   }
@@ -444,11 +432,7 @@ class Templates {
       else
       {
         job.with {
-          steps {
-            dsl {
-              removeAction('DELETE')
-            }
-          }
+          job.delete()
         }
       }
   }
@@ -494,11 +478,7 @@ class Templates {
       else
       {
         job.with {
-          steps {
-            dsl {
-              removeAction('DELETE')
-            }
-          }
+          job.delete()
         }
       }
 
