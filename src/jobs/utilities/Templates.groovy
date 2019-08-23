@@ -219,7 +219,13 @@ class Templates {
       }
       else
       {
-        job.delete()
+        job.with {
+          steps {
+            dsl {
+              removeAction('DELETE')
+            }
+          }
+        }
       }
   }
 
@@ -264,7 +270,13 @@ class Templates {
       }
       else
       {
-        job.delete()
+        job.with {
+          steps {
+            dsl {
+              removeAction('DELETE')
+            }
+          }
+        }
       }
   }
 
@@ -308,7 +320,13 @@ class Templates {
       }
       else
       {
-        job.delete()
+        job.with {
+          steps {
+            dsl {
+              removeAction('DELETE')
+            }
+          }
+        }
       }
   }
 
@@ -425,7 +443,13 @@ class Templates {
       }
       else
       {
-        job.delete()
+        job.with {
+          steps {
+            dsl {
+              removeAction('DELETE')
+            }
+          }
+        }
       }
   }
 
@@ -469,7 +493,14 @@ class Templates {
       }
       else
       {
-        job.delete()
+        job.with {
+          steps {
+            dsl {
+              removeAction('DELETE')
+            }
+          }
+        }
       }
+
   }
 }
