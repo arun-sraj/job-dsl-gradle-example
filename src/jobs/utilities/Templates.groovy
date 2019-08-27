@@ -16,7 +16,9 @@ class Templates {
               unstable("UNSTABLE")
               failure("FAILURE")
             }
-            // predefinedProp('GIT_COMMIT', '$GIT_COMMIT')
+            predefinedProp("BRANCH", "$branch")
+            predefinedProp("ENVIRONMENT", "$environment")
+            predefinedProp("SITE", "$site")
           }
         }
       }
