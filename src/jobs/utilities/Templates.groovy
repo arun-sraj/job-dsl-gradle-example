@@ -163,6 +163,11 @@ class Templates {
               unstable("UNSTABLE")
               failure("FAILURE")
             }
+            parameters {
+              predefinedProp("BRANCH", "$branch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+            }
           }
         }
       }
@@ -199,6 +204,11 @@ class Templates {
               buildStepFailure("FAILURE")
               unstable("UNSTABLE")
               failure("FAILURE")
+            }
+            parameters {
+              predefinedProp("BRANCH", "$branch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
             }
           }
         }
@@ -238,6 +248,11 @@ class Templates {
               unstable("UNSTABLE")
               failure("FAILURE")
             }
+            parameters {
+              predefinedProp("BRANCH", "$branch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+            }
           }
         }
       }
@@ -274,6 +289,11 @@ class Templates {
               buildStepFailure("FAILURE")
               unstable("UNSTABLE")
               failure("FAILURE")
+            }
+            parameters {
+              predefinedProp("BRANCH", "$branch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
             }
           }
         }
@@ -312,6 +332,11 @@ class Templates {
               unstable("UNSTABLE")
               failure("FAILURE")
             }
+            parameters {
+              predefinedProp("BRANCH", "$branch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+            }
           }
         }
       }
@@ -347,6 +372,11 @@ class Templates {
               buildStepFailure("FAILURE")
               unstable("UNSTABLE")
               failure("FAILURE")
+            }
+            parameters {
+              predefinedProp("BRANCH", "$branch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
             }
           }
         }
@@ -385,6 +415,11 @@ class Templates {
               unstable("UNSTABLE")
               failure("FAILURE")
             }
+            parameters {
+              predefinedProp("BRANCH", "$branch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+            }
           }
         }
       }
@@ -422,7 +457,11 @@ class Templates {
               unstable("UNSTABLE")
               failure("FAILURE")
             }
-
+            parameters {
+              predefinedProp("BRANCH", "$branch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+            }
           }
         }
       }
