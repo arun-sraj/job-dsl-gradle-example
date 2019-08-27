@@ -16,6 +16,7 @@ class Templates {
               unstable("UNSTABLE")
               failure("FAILURE")
             }
+            predefinedProp('GIT_COMMIT', '$GIT_COMMIT')
           }
         }
       }
@@ -417,6 +418,7 @@ class Templates {
               unstable("UNSTABLE")
               failure("FAILURE")
             }
+
           }
         }
       }
