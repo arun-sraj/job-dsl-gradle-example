@@ -16,9 +16,11 @@ class Templates {
               unstable("UNSTABLE")
               failure("FAILURE")
             }
-            predefinedProp("BRANCH", "$branch")
-            predefinedProp("ENVIRONMENT", "$environment")
-            predefinedProp("SITE", "$site")
+            parameters {
+              predefinedProp("BRANCH", "$branch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+            }
           }
         }
       }
