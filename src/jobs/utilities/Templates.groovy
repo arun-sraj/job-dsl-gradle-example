@@ -2,7 +2,7 @@ package utilities
 import jenkins.model.Jenkins
 import hudson.model.Job
 class Templates {
-  static void awsAccountSetup(def job, String environment) {
+  static void awsAccountSetup(def job, String environment, String site, String branch) {
     job.with {
       description("Account serup job for environment $environment")
       keepDependencies(false)
@@ -41,7 +41,7 @@ class Templates {
   }
 
     //chef setup
-  static void chefFolderSetup(def folder, String environment) {
+  static void chefFolderSetup(def folder, String environment, String site, String branch) {
     folder.with {
       description "This job will replace all template instances with the latest Chef configuration.  We will need one job per env & application type.  The steps it will follow for each template type are: \
       Start new template instance \
@@ -145,7 +145,7 @@ class Templates {
     }
   }
 
-  static void agentChefSetup(def job, String environment) {
+  static void agentChefSetup(def job, String environment, String site, String branch) {
     job.with {
       description("Job for deploying agent service for the $environment environment.")
       keepDependencies(false)
@@ -182,7 +182,7 @@ class Templates {
     }
   }
 
-  static void authChefSetup(def job, String environment) {
+  static void authChefSetup(def job, String environment, String site, String branch) {
     job.with {
       description("Deploy Chef cookbooks for $environment environment.")
       keepDependencies(false)
@@ -220,7 +220,7 @@ class Templates {
   }
 
 
-  static void glusterfsChefSetup(def job, String environment) {
+  static void glusterfsChefSetup(def job, String environment, String site, String branch) {
     job.with {
       description("Job for deploying glusterfs service for the $environment environment.")
       keepDependencies(false)
@@ -257,7 +257,7 @@ class Templates {
     }
   }
 
-  static void ifcChefSetup(def job, String environment) {
+  static void ifcChefSetup(def job, String environment, String site, String branch) {
     job.with {
       description("Deploy Chef cookbooks of $environment environment for ifc servers")
       keepDependencies(false)
@@ -294,7 +294,7 @@ class Templates {
     }
   }
 
-  static void mqChefSetup(def job, String environment) {
+  static void mqChefSetup(def job, String environment, String site, String branch) {
     job.with {
       description("Job for deploying mq service for the $environment environment.")
       keepDependencies(false)
@@ -330,7 +330,7 @@ class Templates {
       }
     }
   }
-  static void pmsChefSetup(def job, String environment) {
+  static void pmsChefSetup(def job, String environment, String site, String branch) {
     job.with {
       description("Deploy Chef cookbooks for $environment environment using")
       keepDependencies(false)
@@ -367,7 +367,7 @@ class Templates {
     }
   }
 
-  static void postfixChefSetup(def job, String environment) {
+  static void postfixChefSetup(def job, String environment, String site, String branch) {
     job.with {
       description("Job for deploying postfix service for the $environment environment.")
       keepDependencies(false)
@@ -404,7 +404,7 @@ class Templates {
     }
   }
 
-  static void webhookChefSetup(def job, String environment) {
+  static void webhookChefSetup(def job, String environment, String site, String branch) {
     job.with {
       description("Deploy Chef cookbooks for $environment environment using")
       keepDependencies(false)

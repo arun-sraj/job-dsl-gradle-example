@@ -7,57 +7,57 @@ def environmentlist = [release:[branch: "develop", site: "nova"], uat:[branch: "
 for (environment in environmentlist) {
   // Account Setup Job
   def awsAccountSetupJob = job("aws-account-setup-$environment.key")
-  Templates.awsAccountSetup(awsAccountSetupJob, "$environment.key")
+  Templates.awsAccountSetup(awsAccountSetupJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
 
   // Chef Folder Setup
   def chefFolder = folder("chef-setup-$environment.key")
-  Templates.chefFolderSetup(chefFolder, "$environment.key")
+  Templates.chefFolderSetup(chefFolder, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
 
   // Chef Setup Agent Server
   def agentChefSetupJob = job("chef-setup-$environment.key/agent-$environment.key")
-  Templates.agentChefSetup(agentChefSetupJob, "$environment.key")
+  Templates.agentChefSetup(agentChefSetupJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
 
   // Chef Setup auth Server
   if(!environment.equals("prodtest"))
   {
     def authChefSetupJob = job("chef-setup-$environment.key/auth-$environment.key")
-    Templates.authChefSetup(authChefSetupJob, "$environment.key")
+    Templates.authChefSetup(authChefSetupJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
   }
 
   // Chef Setup glusterfs Server
   if(!environment.equals("prodtest"))
   {
     def glusterfsChefSetupJob = job("chef-setup-$environment.key/glusterfs-$environment.key")
-    Templates.glusterfsChefSetup(glusterfsChefSetupJob, "$environment.key")
+    Templates.glusterfsChefSetup(glusterfsChefSetupJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
   }
 
   // Chef Setup ifc Server
   if(!environment.equals("prodtest"))
   {
     def ifcChefSetupJob = job("chef-setup-$environment.key/ifc-$environment.key")
-    Templates.ifcChefSetup(ifcChefSetupJob, "$environment.key")
+    Templates.ifcChefSetup(ifcChefSetupJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
   }
 
   // Chef Setup mq Server
   def mqChefSetupJob = job("chef-setup-$environment.key/mq-$environment.key")
-  Templates.mqChefSetup(mqChefSetupJob, "$environment.key")
+  Templates.mqChefSetup(mqChefSetupJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
 
   // Chef Setup pms Server
   def pmsChefSetupJob = job("chef-setup-$environment.key/pms-$environment.key")
-  Templates.pmsChefSetup(pmsChefSetupJob, "$environment.key")
+  Templates.pmsChefSetup(pmsChefSetupJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
 
   // Chef Setup postfix Server
   if(!environment.equals("prodtest"))
   {
     def postfixChefSetupJob = job("chef-setup-$environment.key/postfix-$environment.key")
-    Templates.postfixChefSetup(postfixChefSetupJob, "$environment.key")
+    Templates.postfixChefSetup(postfixChefSetupJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
   }
 
   // Chef Setup webhook Server
   if(!environment.equals("prodtest"))
   {
     def webhookChefSetupJob = job("chef-setup-$environment.key/webhook-$environment.key")
-    Templates.webhookChefSetup(webhookChefSetupJob, "$environment.key")
+    Templates.webhookChefSetup(webhookChefSetupJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
   }
 
   listView("$environment.key") {
