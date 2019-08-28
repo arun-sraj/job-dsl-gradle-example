@@ -607,6 +607,238 @@ job("custvpn/custvpn-server-setup") {
         }
     }
 }
+// Deploy Jobs
+
+// Auth deploy job.
+job("./deploy/01-create-template-instance-from-chef-template-image-auth") {
+    description("Creates all template servers required to deploy auth")
+    keepDependencies(false)
+    parameters {
+        stringParam("BRANCH", "develop", "Specify github branch name to deploy")
+        stringParam("ENVIRONMENT", "staging", """Specify environment name
+                    Eg: staging, release, uat""")
+        stringParam("SITE", "nova", """Specify site name
+                    Eg: nova, ohio""")
+    }
+    disabled(false)
+    concurrentBuild(true)
+    steps {
+        shell("bash ./StayNTouch/deploy/auth/01-create-template-instance-from-chef-template-image-auth/build.sh")
+    }
+    configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+            strategy {
+                'daysToKeep'('3')
+                'numToKeep'('-1')
+                'artifactDaysToKeep'('-1')
+                'artifactNumToKeep'('-1')
+            }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+            'autoRebuild'('false')
+            'rebuildDisabled'('false')
+        }
+    }
+}
+
+job("./deploy/02-deploy-via-capistrano-to-template-instance-auth") {
+    description()
+    keepDependencies(false)
+    parameters {
+        stringParam("BRANCH", "develop", "Specify github branch name to deploy")
+        stringParam("ENVIRONMENT", "staging", """Specify environment name
+                    Eg: staging, release, uat""")
+        stringParam("SETUP_NEW_DB", "no", "")
+    }
+    scm {
+        git {
+            remote {
+                github("StayNTouch/rover-auth", "ssh")
+            }
+            branch("origin/\$BRANCH")
+        }
+    }
+    disabled(false)
+    concurrentBuild(true)
+    steps {
+        shell("""eval `ssh-agent -s`
+                echo \$SSH_AGENT_PID > ssh-agent.pid
+                ssh-add
+                bundle install
+                bundle exec cap \$ENVIRONMENT deploy BRANCH=\$BRANCH SETUP_NEW_DB=\$SETUP_NEW_DB""")
+        shell("""kill -9 `cat ssh-agent.pid`
+                echo 'completed'""")
+    }
+    configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+            strategy {
+                'daysToKeep'('3')
+                'numToKeep'('-1')
+                'artifactDaysToKeep'('-1')
+                'artifactNumToKeep'('-1')
+            }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+            'autoRebuild'('false')
+            'rebuildDisabled'('false')
+        }
+    }
+}
+
+job("./deploy/03-A-swap-asg-auth-app") {
+    description("This job creates an auto-scaling group for AUTH app server instances with the latest code")
+    keepDependencies(false)
+    parameters {
+        stringParam("BRANCH", "develop", "Specify github branch name to deploy")
+        stringParam("ENVIRONMENT", "staging", """Specify environment name
+                    Eg: staging, release, uat""")
+        stringParam("SITE", "nova", """Specify site name
+                    Eg: nova, ohio""")
+    }
+    disabled(false)
+    concurrentBuild(true)
+    steps {
+        shell("bash ./StayNTouch/deploy/auth/03-A-swap-asg-auth-app/build.sh")
+    }
+    configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+            strategy {
+                'daysToKeep'('3')
+                'numToKeep'('-1')
+                'artifactDaysToKeep'('-1')
+                'artifactNumToKeep'('-1')
+            }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+            'autoRebuild'('false')
+            'rebuildDisabled'('false')
+        }
+    }
+}
+
+job("./deploy/03-B-swap-asg-auth-wkr") {
+    description("This job creates an auto-scaling group for AUTH wkr server instances with the latest code")
+    keepDependencies(false)
+    parameters {
+        stringParam("BRANCH", "develop", "Specify github branch name to deploy")
+        stringParam("ENVIRONMENT", "staging", """Specify environment name
+                    Eg: staging, release, uat""")
+        stringParam("SITE", "nova", """Specify site name
+                    Eg: nova, ohio""")
+    }
+    disabled(false)
+    concurrentBuild(true)
+    steps {
+        shell("bash ./StayNTouch/deploy/auth/03-B-swap-asg-auth-wkr/build.sh")
+    }
+    configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+            strategy {
+                'daysToKeep'('3')
+                'numToKeep'('-1')
+                'artifactDaysToKeep'('-1')
+                'artifactNumToKeep'('-1')
+            }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+            'autoRebuild'('false')
+            'rebuildDisabled'('false')
+        }
+    }
+}
+
+job("./deploy/03-C-swap-asg-auth-ipc") {
+    description("This job creates an auto-scaling group for AUTH wkr server instances with the latest code")
+    keepDependencies(false)
+    parameters {
+        stringParam("BRANCH", "develop", "Specify github branch name to deploy")
+        stringParam("ENVIRONMENT", "staging", """Specify environment name
+                    Eg: staging, release, uat""")
+        stringParam("SITE", "nova", """Specify site name
+                    Eg: nova, ohio""")
+    }
+    disabled(false)
+    concurrentBuild(true)
+    steps {
+        shell("bash ./StayNTouch/deploy/auth/03-C-swap-asg-auth-ipc/build.sh")
+    }
+    configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+            strategy {
+                'daysToKeep'('3')
+                'numToKeep'('-1')
+                'artifactDaysToKeep'('-1')
+                'artifactNumToKeep'('-1')
+            }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+            'autoRebuild'('false')
+            'rebuildDisabled'('false')
+        }
+    }
+}
+
+job("./deploy/03-D-swap-asg-auth-railsc") {
+    description("This job creates an auto-scaling group for AUTH wkr server instances with the latest code")
+    keepDependencies(false)
+    parameters {
+        stringParam("BRANCH", "develop", "Specify github branch name to deploy")
+        stringParam("ENVIRONMENT", "staging", """Specify environment name
+                    Eg: staging, release, uat""")
+        stringParam("SITE", "nova", """Specify site name
+                    Eg: nova, ohio""")
+    }
+    disabled(false)
+    concurrentBuild(true)
+    steps {
+        shell("bash ./StayNTouch/deploy/auth/03-D-swap-asg-auth-railsc/build.sh")
+    }
+    configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+            strategy {
+                'daysToKeep'('3')
+                'numToKeep'('-1')
+                'artifactDaysToKeep'('-1')
+                'artifactNumToKeep'('-1')
+            }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+            'autoRebuild'('false')
+            'rebuildDisabled'('false')
+        }
+    }
+}
+
+job("./deploy/04-cleanup-auth") {
+    description("This job clean up the deployment AUTH template stack")
+    keepDependencies(false)
+    parameters {
+        stringParam("BRANCH", "develop", "Specify github branch name to deploy")
+        stringParam("ENVIRONMENT", "staging", """Specify environment name
+                    Eg: staging, release, uat""")
+        stringParam("SITE", "nova", """Specify site name
+                    Eg: nova, ohio""")
+    }
+    disabled(false)
+    concurrentBuild(true)
+    steps {
+        shell("bash ./StayNTouch/deploy/auth/04-cleanup-auth/build.sh")
+    }
+    configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+            strategy {
+                'daysToKeep'('3')
+                'numToKeep'('-1')
+                'artifactDaysToKeep'('-1')
+                'artifactNumToKeep'('-1')
+            }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+            'autoRebuild'('false')
+            'rebuildDisabled'('false')
+        }
+    }
+}
 
 // Main view StyaNTouch
 
