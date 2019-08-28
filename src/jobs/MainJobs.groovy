@@ -14,28 +14,28 @@ job("aws-account-setup") {
         shell("bash ./StayNTouch/aws-account-setup/build.sh")
     }
     configure {
-        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+        it / "properties" / "jenkins.model.BuildDiscarderProperty" {
             strategy {
-                'daysToKeep'('3')
-                'numToKeep'('-1')
-                'artifactDaysToKeep'('-1')
-                'artifactNumToKeep'('-1')
+                "daysToKeep"("3")
+                "numToKeep"("-1")
+                "artifactDaysToKeep"("-1")
+                "artifactNumToKeep"("-1")
             }
         }
-        it / 'properties' / 'com.coravy.hudson.plugins.github.GithubProjectProperty' {
-            'projectUrl'('https://github.com/StayNTouch/rover-cloud-formation/')
+        it / "properties" / "com.coravy.hudson.plugins.github.GithubProjectProperty" {
+            "projectUrl"("https://github.com/StayNTouch/rover-cloud-formation/")
             displayName()
         }
-        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
-            'autoRebuild'('false')
-            'rebuildDisabled'('false')
+        it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
+            "autoRebuild"("false")
+            "rebuildDisabled"("false")
         }
     }
 }
 
 //base-image-creator
 folder("base-image-creator") {
-    description 'This includes all the job to create the base image.'
+    description "This includes all the job to create the base image."
 }
 
 job("base-image-creator/ubuntu-16-04-base-image-creator") {
@@ -54,29 +54,29 @@ job("base-image-creator/ubuntu-16-04-base-image-creator") {
         shell("bash ./StayNTouch/base-image-creator/create-base-image.sh")
     }
     configure {
-        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
-            'autoRebuild'('false')
-            'rebuildDisabled'('false')
+        it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
+            "autoRebuild"("false")
+            "rebuildDisabled"("false")
         }
     }
 }
 //chef setup
 
 folder("chef-setup") {
-    description 'This job will replace all template instances with the latest Chef configuration.  We will need one job per env & application type.  The steps it will follow for each template type are: \
+    description "This job will replace all template instances with the latest Chef configuration.  We will need one job per env & application type.  The steps it will follow for each template type are: \
     Start new template instance \
     Bootstrap it with Chef Server \
     Execute chef client to configure node (with startup scripts disabled / commented out) \
     Shutdown template instance \
     Take template image \
-    Terminate template instance'
+    Terminate template instance"
     views {
-        listView('auth') {
-            description('Auth chef setup jobs')
+        listView("auth") {
+            description("Auth chef setup jobs")
             filterBuildQueue()
             filterExecutors()
             jobs {
-                name('auth')
+                name("auth")
             }
             columns {
                 status()
@@ -88,12 +88,12 @@ folder("chef-setup") {
                 buildButton()
             }
         }
-        listView('general service') {
-            description('All general service jobs')
+        listView("general service") {
+            description("All general service jobs")
             filterBuildQueue()
             filterExecutors()
             jobs {
-                names('postfix', 'mq-app', 'mq', 'glusterfs', ' agent')
+                names("postfix", "mq-app", "mq", "glusterfs", " agent")
             }
             columns {
                 status()
@@ -105,12 +105,12 @@ folder("chef-setup") {
                 buildButton()
             }
         }
-        listView('ifc') {
-            description('ifc chef setup jobs')
+        listView("ifc") {
+            description("ifc chef setup jobs")
             filterBuildQueue()
             filterExecutors()
             jobs {
-                name('ifc')
+                name("ifc")
             }
             columns {
                 status()
@@ -122,12 +122,12 @@ folder("chef-setup") {
                 buildButton()
             }
         }
-        listView('pms') {
-            description('pms chef setup jobs')
+        listView("pms") {
+            description("pms chef setup jobs")
             filterBuildQueue()
             filterExecutors()
             jobs {
-                name('pms')
+                name("pms")
             }
             columns {
                 status()
@@ -139,12 +139,12 @@ folder("chef-setup") {
                 buildButton()
             }
         }
-        listView('webhook') {
-            description('webhook chef setup jobs')
+        listView("webhook") {
+            description("webhook chef setup jobs")
             filterBuildQueue()
             filterExecutors()
             jobs {
-                name('webhook')
+                name("webhook")
             }
             columns {
                 status()
@@ -175,17 +175,17 @@ Eg: nova, ohio""")
         shell("bash ./StayNTouch/chef-setup/general-services/agent/build.sh")
     }
     configure {
-        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+        it / "properties" / "jenkins.model.BuildDiscarderProperty" {
             strategy {
-                'daysToKeep'('3')
-                'numToKeep'('-1')
-                'artifactDaysToKeep'('-1')
-                'artifactNumToKeep'('-1')
+                "daysToKeep"("3")
+                "numToKeep"("-1")
+                "artifactDaysToKeep"("-1")
+                "artifactNumToKeep"("-1")
             }
         }
-        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
-            'autoRebuild'('false')
-            'rebuildDisabled'('false')
+        it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
+            "autoRebuild"("false")
+            "rebuildDisabled"("false")
         }
     }
 }
@@ -206,17 +206,17 @@ Eg: nova, ohio""")
         shell("bash ./StayNTouch/chef-setup/auth/auth/build.sh")
     }
     configure {
-        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+        it / "properties" / "jenkins.model.BuildDiscarderProperty" {
             strategy {
-                'daysToKeep'('3')
-                'numToKeep'('-1')
-                'artifactDaysToKeep'('-1')
-                'artifactNumToKeep'('-1')
+                "daysToKeep"("3")
+                "numToKeep"("-1")
+                "artifactDaysToKeep"("-1")
+                "artifactNumToKeep"("-1")
             }
         }
-        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
-            'autoRebuild'('false')
-            'rebuildDisabled'('false')
+        it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
+            "autoRebuild"("false")
+            "rebuildDisabled"("false")
         }
     }
 }
@@ -237,17 +237,17 @@ Eg: nova, ohio""")
         shell("bash ./StayNTouch/chef-setup/ifc/ifc/build.sh")
     }
     configure {
-        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+        it / "properties" / "jenkins.model.BuildDiscarderProperty" {
             strategy {
-                'daysToKeep'('3')
-                'numToKeep'('-1')
-                'artifactDaysToKeep'('-1')
-                'artifactNumToKeep'('-1')
+                "daysToKeep"("3")
+                "numToKeep"("-1")
+                "artifactDaysToKeep"("-1")
+                "artifactNumToKeep"("-1")
             }
         }
-        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
-            'autoRebuild'('false')
-            'rebuildDisabled'('false')
+        it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
+            "autoRebuild"("false")
+            "rebuildDisabled"("false")
         }
     }
 }
@@ -268,17 +268,17 @@ Eg: nova, ohio""")
         shell("bash ./StayNTouch/chef-setup/general-services/mq/build.sh")
     }
     configure {
-        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+        it / "properties" / "jenkins.model.BuildDiscarderProperty" {
             strategy {
-                'daysToKeep'('3')
-                'numToKeep'('-1')
-                'artifactDaysToKeep'('-1')
-                'artifactNumToKeep'('-1')
+                "daysToKeep"("3")
+                "numToKeep"("-1")
+                "artifactDaysToKeep"("-1")
+                "artifactNumToKeep"("-1")
             }
         }
-        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
-            'autoRebuild'('false')
-            'rebuildDisabled'('false')
+        it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
+            "autoRebuild"("false")
+            "rebuildDisabled"("false")
         }
     }
 }
@@ -299,17 +299,17 @@ Eg: nova, ohio""")
         shell("bash ./StayNTouch/chef-setup/general-services/mq/asg.sh")
     }
     configure {
-        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+        it / "properties" / "jenkins.model.BuildDiscarderProperty" {
             strategy {
-                'daysToKeep'('3')
-                'numToKeep'('-1')
-                'artifactDaysToKeep'('-1')
-                'artifactNumToKeep'('-1')
+                "daysToKeep"("3")
+                "numToKeep"("-1")
+                "artifactDaysToKeep"("-1")
+                "artifactNumToKeep"("-1")
             }
         }
-        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
-            'autoRebuild'('false')
-            'rebuildDisabled'('false')
+        it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
+            "autoRebuild"("false")
+            "rebuildDisabled"("false")
         }
     }
 }
@@ -330,17 +330,17 @@ Eg: nova, ohio""")
         shell("bash ./StayNTouch/chef-setup/pms/pms/build.sh")
     }
     configure {
-        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+        it / "properties" / "jenkins.model.BuildDiscarderProperty" {
             strategy {
-                'daysToKeep'('3')
-                'numToKeep'('-1')
-                'artifactDaysToKeep'('-1')
-                'artifactNumToKeep'('-1')
+                "daysToKeep"("3")
+                "numToKeep"("-1")
+                "artifactDaysToKeep"("-1")
+                "artifactNumToKeep"("-1")
             }
         }
-        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
-            'autoRebuild'('false')
-            'rebuildDisabled'('false')
+        it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
+            "autoRebuild"("false")
+            "rebuildDisabled"("false")
         }
     }
 }
@@ -369,17 +369,17 @@ Eg: nova, ohio""")
         shell("bash ./StayNTouch/chef-setup/general-services/postfix/build.sh")
     }
     configure {
-        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+        it / "properties" / "jenkins.model.BuildDiscarderProperty" {
             strategy {
-                'daysToKeep'('3')
-                'numToKeep'('-1')
-                'artifactDaysToKeep'('-1')
-                'artifactNumToKeep'('-1')
+                "daysToKeep"("3")
+                "numToKeep"("-1")
+                "artifactDaysToKeep"("-1")
+                "artifactNumToKeep"("-1")
             }
         }
-        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
-            'autoRebuild'('false')
-            'rebuildDisabled'('false')
+        it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
+            "autoRebuild"("false")
+            "rebuildDisabled"("false")
         }
     }
 }
@@ -400,17 +400,17 @@ Eg: nova, ohio""")
         shell("bash ./StayNTouch/chef-setup/webhook/webhook/build.sh")
     }
     configure {
-        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+        it / "properties" / "jenkins.model.BuildDiscarderProperty" {
             strategy {
-                'daysToKeep'('3')
-                'numToKeep'('-1')
-                'artifactDaysToKeep'('-1')
-                'artifactNumToKeep'('-1')
+                "daysToKeep"("3")
+                "numToKeep"("-1")
+                "artifactDaysToKeep"("-1")
+                "artifactNumToKeep"("-1")
             }
         }
-        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
-            'autoRebuild'('false')
-            'rebuildDisabled'('false')
+        it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
+            "autoRebuild"("false")
+            "rebuildDisabled"("false")
         }
     }
 }
@@ -431,24 +431,24 @@ Eg: nova, ohio""")
         shell("bash ./StayNTouch/chef-setup/general-services/glusterfs/build.sh")
     }
     configure {
-        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+        it / "properties" / "jenkins.model.BuildDiscarderProperty" {
             strategy {
-                'daysToKeep'('3')
-                'numToKeep'('-1')
-                'artifactDaysToKeep'('-1')
-                'artifactNumToKeep'('-1')
+                "daysToKeep"("3")
+                "numToKeep"("-1")
+                "artifactDaysToKeep"("-1")
+                "artifactNumToKeep"("-1")
             }
         }
-        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
-            'autoRebuild'('false')
-            'rebuildDisabled'('false')
+        it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
+            "autoRebuild"("false")
+            "rebuildDisabled"("false")
         }
     }
 }
 
 // Custvpn service setup.
 folder("custvpn") {
-    description 'Custom VPN for ipsec connection.'
+    description "Custom VPN for ipsec connection."
 }
 
 job("custvpn/custvpn-server-setup") {
@@ -468,17 +468,17 @@ job("custvpn/custvpn-server-setup") {
         shell("bash ./StayNTouch/custvpn-server/custvpn-server-setup.sh")
     }
     configure {
-        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+        it / "properties" / "jenkins.model.BuildDiscarderProperty" {
             strategy {
-                'daysToKeep'('3')
-                'numToKeep'('-1')
-                'artifactDaysToKeep'('-1')
-                'artifactNumToKeep'('-1')
+                "daysToKeep"("3")
+                "numToKeep"("-1")
+                "artifactDaysToKeep"("-1")
+                "artifactNumToKeep"("-1")
             }
         }
-        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
-            'autoRebuild'('false')
-            'rebuildDisabled'('false')
+        it / "properties" / "com.sonyericsson.rebuild.RebuildSettings" {
+            "autoRebuild"("false")
+            "rebuildDisabled"("false")
         }
     }
 }
@@ -486,7 +486,7 @@ job("custvpn/custvpn-server-setup") {
 // Deploy job configuration.
 // Deploy Folder
     folder("deploy") {
-    description 'This job will deploy the template image to the auto scaling group for each template type.  We will need one job per env & application type.  The steps for each template type are: \
+    description "This job will deploy the template image to the auto scaling group for each template type.  We will need one job per env & application type.  The steps for each template type are: \
     Create template instance from chef template image \
     Deploy via capistrano to template instance (includes gulp, migrations) \
     Shutdown template instance \
@@ -497,14 +497,14 @@ job("custvpn/custvpn-server-setup") {
     Swap load balancer to new auto scaling group in case of app servers \
     Gracefully stop old auto scaling group \
     Allows existing processes to finish gracefully \
-    Instance configured with 2.5 hour termination policy'
+    Instance configured with 2.5 hour termination policy"
     views {
-        listView('UI') {
-            description('Ui chef deploy jobs')
+        listView("UI") {
+            description("Ui chef deploy jobs")
             filterBuildQueue()
             filterExecutors()
             jobs {
-                name('rover-ui-shared', 'rover-zest-web')
+                name("rover-ui-shared", "rover-zest-web")
             }
             columns {
                 status()
@@ -516,13 +516,13 @@ job("custvpn/custvpn-server-setup") {
                 buildButton()
             }
         }
-        listView('auth') {
-            description('All auth deploy jobs')
+        listView("auth") {
+            description("All auth deploy jobs")
             filterBuildQueue()
             filterExecutors()
             jobs {
-                names('01-create-template-instance-from-chef-template-image-auth', '02-deploy-via-capistrano-to-template-instance-auth', '04-cleanup-auth')
-                regex('03-A-swap-asg-auth.+')
+                names("01-create-template-instance-from-chef-template-image-auth", "02-deploy-via-capistrano-to-template-instance-auth", "04-cleanup-auth")
+                regex("03-A-swap-asg-auth.+")
             }
             columns {
                 status()
@@ -534,13 +534,13 @@ job("custvpn/custvpn-server-setup") {
                 buildButton()
             }
         }
-        listView('ifc') {
-            description('ifc deploy jobs')
+        listView("ifc") {
+            description("ifc deploy jobs")
             filterBuildQueue()
             filterExecutors()
             jobs {
-                names('01-create-template-instance-from-chef-template-image-ifc', '02-deploy-via-capistrano-to-template-instance-ifc', '04-cleanup-ifc')
-                regex('03-A-swap-asg-ifc.+')
+                names("01-create-template-instance-from-chef-template-image-ifc", "02-deploy-via-capistrano-to-template-instance-ifc", "04-cleanup-ifc")
+                regex("03-A-swap-asg-ifc.+")
             }
             columns {
                 status()
@@ -552,13 +552,13 @@ job("custvpn/custvpn-server-setup") {
                 buildButton()
             }
         }
-        listView('pms') {
-            description('pms deploy jobs')
+        listView("pms") {
+            description("pms deploy jobs")
             filterBuildQueue()
             filterExecutors()
             jobs {
-                names('01-create-template-instance-from-chef-template-image-pms', '02-deploy-via-capistrano-to-template-instance-pms', '04-cleanup-pms')
-                regex('03-A-swap-asg-pms.+')
+                names("01-create-template-instance-from-chef-template-image-pms", "02-deploy-via-capistrano-to-template-instance-pms", "04-cleanup-pms")
+                regex("03-A-swap-asg-pms.+")
             }
             columns {
                 status()
@@ -570,13 +570,13 @@ job("custvpn/custvpn-server-setup") {
                 buildButton()
             }
         }
-        listView('webhook') {
-            description('webhook deploy jobs')
+        listView("webhook") {
+            description("webhook deploy jobs")
             filterBuildQueue()
             filterExecutors()
             jobs {
-                names('01-create-template-instance-from-chef-template-image-webhook', '02-deploy-via-capistrano-to-template-instance-webhook', '04-cleanup-webhook')
-                regex('03-A-swap-asg-webhook.+')
+                names("01-create-template-instance-from-chef-template-image-webhook", "02-deploy-via-capistrano-to-template-instance-webhook", "04-cleanup-webhook")
+                regex("03-A-swap-asg-webhook.+")
             }
             columns {
                 status()
@@ -588,12 +588,12 @@ job("custvpn/custvpn-server-setup") {
                 buildButton()
             }
         }
-        listView('excavator') {
-            description('excavator deploy jobs')
+        listView("excavator") {
+            description("excavator deploy jobs")
             filterBuildQueue()
             filterExecutors()
             jobs {
-                names('excavator')
+                names("excavator")
             }
             columns {
                 status()
@@ -610,12 +610,12 @@ job("custvpn/custvpn-server-setup") {
 
 // Main view StyaNTouch
 
-listView('StayNTouch') {
-    description('All root jobs for project A')
+listView("StayNTouch") {
+    description("All root jobs for project A")
     filterBuildQueue()
     filterExecutors()
     jobs {
-        names('aws-account-setup', 'base-image-creator', 'chef-setup', 'custvpn')
+        names("aws-account-setup", "base-image-creator", "chef-setup", "custvpn")
     }
     columns {
         status()
