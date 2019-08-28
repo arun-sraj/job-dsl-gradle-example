@@ -615,9 +615,9 @@ job("./deploy/01-create-template-instance-from-chef-template-image-auth") {
     keepDependencies(false)
     parameters {
         stringParam("BRANCH", "develop", "Specify github branch name to deploy")
-        stringParam("ENVIRONMENT", "staging", """Specify environment name
+        stringParam("ENVIRONMENT", "staging", """Specify environment name \
                     Eg: staging, release, uat""")
-        stringParam("SITE", "nova", """Specify site name
+        stringParam("SITE", "nova", """Specify site name \
                     Eg: nova, ohio""")
     }
     disabled(false)
@@ -646,7 +646,7 @@ job("./deploy/02-deploy-via-capistrano-to-template-instance-auth") {
     keepDependencies(false)
     parameters {
         stringParam("BRANCH", "develop", "Specify github branch name to deploy")
-        stringParam("ENVIRONMENT", "staging", """Specify environment name
+        stringParam("ENVIRONMENT", "staging", """Specify environment name \
                     Eg: staging, release, uat""")
         stringParam("SETUP_NEW_DB", "no", "")
     }
@@ -661,12 +661,12 @@ job("./deploy/02-deploy-via-capistrano-to-template-instance-auth") {
     disabled(false)
     concurrentBuild(true)
     steps {
-        shell("""eval `ssh-agent -s`
-                echo \$SSH_AGENT_PID > ssh-agent.pid
-                ssh-add
-                bundle install
+        shell("""eval `ssh-agent -s` \
+                echo \$SSH_AGENT_PID > ssh-agent.pid \
+                ssh-add \
+                bundle install \
                 bundle exec cap \$ENVIRONMENT deploy BRANCH=\$BRANCH SETUP_NEW_DB=\$SETUP_NEW_DB""")
-        shell("""kill -9 `cat ssh-agent.pid`
+        shell("""kill -9 `cat ssh-agent.pid` \
                 echo 'completed'""")
     }
     configure {
@@ -815,9 +815,9 @@ job("./deploy/04-cleanup-auth") {
     parameters {
         stringParam("BRANCH", "develop", "Specify github branch name to deploy")
         stringParam("ENVIRONMENT", "staging", """Specify environment name
-                    Eg: staging, release, uat""")
+        Eg: staging, release, uat""")
         stringParam("SITE", "nova", """Specify site name
-                    Eg: nova, ohio""")
+        Eg: nova, ohio""")
     }
     disabled(false)
     concurrentBuild(true)
