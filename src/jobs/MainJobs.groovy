@@ -615,10 +615,8 @@ job("./deploy/01-create-template-instance-from-chef-template-image-auth") {
     keepDependencies(false)
     parameters {
         stringParam("BRANCH", "develop", "Specify github branch name to deploy")
-        stringParam("ENVIRONMENT", "staging", """Specify environment name \
-                    Eg: staging, release, uat""")
-        stringParam("SITE", "nova", """Specify site name \
-                    Eg: nova, ohio""")
+        stringParam("ENVIRONMENT", "staging", """Specify environment name Eg: staging, release, uat""")
+        stringParam("SITE", "nova", """Specify site name Eg: nova, ohio""")
     }
     disabled(false)
     concurrentBuild(true)
@@ -646,8 +644,7 @@ job("./deploy/02-deploy-via-capistrano-to-template-instance-auth") {
     keepDependencies(false)
     parameters {
         stringParam("BRANCH", "develop", "Specify github branch name to deploy")
-        stringParam("ENVIRONMENT", "staging", """Specify environment name \
-                    Eg: staging, release, uat""")
+        stringParam("ENVIRONMENT", "staging", """Specify environment name Eg: staging, release, uat""")
         stringParam("SETUP_NEW_DB", "no", "")
     }
     scm {
@@ -661,13 +658,13 @@ job("./deploy/02-deploy-via-capistrano-to-template-instance-auth") {
     disabled(false)
     concurrentBuild(true)
     steps {
-        shell("""eval `ssh-agent -s` \
-                echo \$SSH_AGENT_PID > ssh-agent.pid \
-                ssh-add \
-                bundle install \
-                bundle exec cap \$ENVIRONMENT deploy BRANCH=\$BRANCH SETUP_NEW_DB=\$SETUP_NEW_DB""")
-        shell("""kill -9 `cat ssh-agent.pid` \
-                echo 'completed'""")
+        shell("""eval `ssh-agent -s`
+echo \$SSH_AGENT_PID > ssh-agent.pid
+ssh-add
+bundle install
+bundle exec cap \$ENVIRONMENT deploy BRANCH=\$BRANCH SETUP_NEW_DB=\$SETUP_NEW_DB""")
+        shell("""kill -9 `cat ssh-agent.pid`
+echo 'completed'""")
     }
     configure {
         it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
@@ -690,10 +687,8 @@ job("./deploy/03-A-swap-asg-auth-app") {
     keepDependencies(false)
     parameters {
         stringParam("BRANCH", "develop", "Specify github branch name to deploy")
-        stringParam("ENVIRONMENT", "staging", """Specify environment name
-                    Eg: staging, release, uat""")
-        stringParam("SITE", "nova", """Specify site name
-                    Eg: nova, ohio""")
+        stringParam("ENVIRONMENT", "staging", """Specify environment name Eg: staging, release, uat""")
+        stringParam("SITE", "nova", """Specify site name Eg: nova, ohio""")
     }
     disabled(false)
     concurrentBuild(true)
@@ -721,10 +716,8 @@ job("./deploy/03-B-swap-asg-auth-wkr") {
     keepDependencies(false)
     parameters {
         stringParam("BRANCH", "develop", "Specify github branch name to deploy")
-        stringParam("ENVIRONMENT", "staging", """Specify environment name
-                    Eg: staging, release, uat""")
-        stringParam("SITE", "nova", """Specify site name
-                    Eg: nova, ohio""")
+        stringParam("ENVIRONMENT", "staging", """Specify environment name Eg: staging, release, uat""")
+        stringParam("SITE", "nova", """Specify site name Eg: nova, ohio""")
     }
     disabled(false)
     concurrentBuild(true)
@@ -752,10 +745,8 @@ job("./deploy/03-C-swap-asg-auth-ipc") {
     keepDependencies(false)
     parameters {
         stringParam("BRANCH", "develop", "Specify github branch name to deploy")
-        stringParam("ENVIRONMENT", "staging", """Specify environment name
-                    Eg: staging, release, uat""")
-        stringParam("SITE", "nova", """Specify site name
-                    Eg: nova, ohio""")
+        stringParam("ENVIRONMENT", "staging", """Specify environment name Eg: staging, release, uat""")
+        stringParam("SITE", "nova", """Specify site name Eg: nova, ohio""")
     }
     disabled(false)
     concurrentBuild(true)
@@ -783,10 +774,8 @@ job("./deploy/03-D-swap-asg-auth-railsc") {
     keepDependencies(false)
     parameters {
         stringParam("BRANCH", "develop", "Specify github branch name to deploy")
-        stringParam("ENVIRONMENT", "staging", """Specify environment name
-                    Eg: staging, release, uat""")
-        stringParam("SITE", "nova", """Specify site name
-                    Eg: nova, ohio""")
+        stringParam("ENVIRONMENT", "staging", """Specify environment name Eg: staging, release, uat""")
+        stringParam("SITE", "nova", """Specify site name Eg: nova, ohio""")
     }
     disabled(false)
     concurrentBuild(true)
@@ -814,10 +803,8 @@ job("./deploy/04-cleanup-auth") {
     keepDependencies(false)
     parameters {
         stringParam("BRANCH", "develop", "Specify github branch name to deploy")
-        stringParam("ENVIRONMENT", "staging", """Specify environment name
-        Eg: staging, release, uat""")
-        stringParam("SITE", "nova", """Specify site name
-        Eg: nova, ohio""")
+        stringParam("ENVIRONMENT", "staging", """Specify environment name Eg: staging, release, uat""")
+        stringParam("SITE", "nova", """Specify site name Eg: nova, ohio""")
     }
     disabled(false)
     concurrentBuild(true)
