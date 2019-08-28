@@ -483,6 +483,131 @@ job("custvpn/custvpn-server-setup") {
     }
 }
 
+// Deploy job configuration.
+// Deploy Folder
+    folder("deploy") {
+    description 'This job will deploy the template image to the auto scaling group for each template type.  We will need one job per env & application type.  The steps for each template type are: \
+    Create template instance from chef template image \
+    Deploy via capistrano to template instance (includes gulp, migrations) \
+    Shutdown template instance \
+    Create new deploy image from template instance \
+    Terminate template instance \
+    Create a new launch configuration associated with the deploy image (with user-data enabling / uncommenting startup scripts) \
+    Create and start a new auto scaling group for the launch configuration \
+    Swap load balancer to new auto scaling group in case of app servers \
+    Gracefully stop old auto scaling group \
+    Allows existing processes to finish gracefully \
+    Instance configured with 2.5 hour termination policy'
+    views {
+        listView('UI') {
+            description('Ui chef deploy jobs')
+            filterBuildQueue()
+            filterExecutors()
+            jobs {
+                name('rover-ui-shared', 'rover-zest-web')
+            }
+            columns {
+                status()
+                weather()
+                name()
+                lastSuccess()
+                lastFailure()
+                lastDuration()
+                buildButton()
+            }
+        }
+        listView('auth') {
+            description('All auth deploy jobs')
+            filterBuildQueue()
+            filterExecutors()
+            jobs {
+                names('01-create-template-instance-from-chef-template-image-auth', '02-deploy-via-capistrano-to-template-instance-auth', '04-cleanup-auth')
+                regex('03-A-swap-asg-auth.+')
+            }
+            columns {
+                status()
+                weather()
+                name()
+                lastSuccess()
+                lastFailure()
+                lastDuration()
+                buildButton()
+            }
+        }
+        listView('ifc') {
+            description('ifc deploy jobs')
+            filterBuildQueue()
+            filterExecutors()
+            jobs {
+                names('01-create-template-instance-from-chef-template-image-ifc', '02-deploy-via-capistrano-to-template-instance-ifc', '04-cleanup-ifc')
+                regex('03-A-swap-asg-ifc.+')
+            }
+            columns {
+                status()
+                weather()
+                name()
+                lastSuccess()
+                lastFailure()
+                lastDuration()
+                buildButton()
+            }
+        }
+        listView('pms') {
+            description('pms deploy jobs')
+            filterBuildQueue()
+            filterExecutors()
+            jobs {
+                names('01-create-template-instance-from-chef-template-image-pms', '02-deploy-via-capistrano-to-template-instance-pms', '04-cleanup-pms')
+                regex('03-A-swap-asg-pms.+')
+            }
+            columns {
+                status()
+                weather()
+                name()
+                lastSuccess()
+                lastFailure()
+                lastDuration()
+                buildButton()
+            }
+        }
+        listView('webhook') {
+            description('webhook deploy jobs')
+            filterBuildQueue()
+            filterExecutors()
+            jobs {
+                names('01-create-template-instance-from-chef-template-image-webhook', '02-deploy-via-capistrano-to-template-instance-webhook', '04-cleanup-webhook')
+                regex('03-A-swap-asg-webhook.+')
+            }
+            columns {
+                status()
+                weather()
+                name()
+                lastSuccess()
+                lastFailure()
+                lastDuration()
+                buildButton()
+            }
+        }
+        listView('excavator') {
+            description('excavator deploy jobs')
+            filterBuildQueue()
+            filterExecutors()
+            jobs {
+                names('excavator')
+            }
+            columns {
+                status()
+                weather()
+                name()
+                lastSuccess()
+                lastFailure()
+                lastDuration()
+                buildButton()
+            }
+        }
+    }
+}
+
 // Main view StyaNTouch
 
 listView('StayNTouch') {
