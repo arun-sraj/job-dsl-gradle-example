@@ -504,7 +504,7 @@ job("custvpn/custvpn-server-setup") {
             filterBuildQueue()
             filterExecutors()
             jobs {
-                name("rover-ui-shared", "rover-zest-web")
+                names("rover-ui-shared", "rover-zest-web")
             }
             columns {
                 status()
@@ -593,7 +593,7 @@ job("custvpn/custvpn-server-setup") {
             filterBuildQueue()
             filterExecutors()
             jobs {
-                names("excavator")
+                name("excavator")
             }
             columns {
                 status()
