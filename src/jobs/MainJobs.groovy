@@ -2572,7 +2572,7 @@ bash ./StayNTouch/workmail-user-setup/build.sh""")
 // Main view StyaNTouch
 
 listView("StayNTouch") {
-    description("All root jobs for project A")
+    description("All root jobs")
     filterBuildQueue()
     filterExecutors()
     jobs {
