@@ -2349,7 +2349,7 @@ listView("StayNTouch") {
     filterBuildQueue()
     filterExecutors()
     jobs {
-        names("aws-account-setup", "base-image-creator", "chef-setup", "custvpn", "deploy", "infrastructure-setup", "rake-task", "restart-services")
+        names("aws-account-setup", "base-image-creator", "chef-setup", "custvpn", "deploy", "infrastructure-setup", "rake-task", "restart-services", "secrets-manager-setup")
     }
     columns {
         status()
