@@ -1638,6 +1638,79 @@ job("./deploy/rover-zest-web") {
         }
     }
 }
+
+// Infrastructure setup job
+
+job("infrastructure-setup") {
+    description("""This job will configure all AWS services needed for a new or updated environment/site.  The job will run one parent Cloudformation template with nested child templates.  The setup includes:
+Account setup
+
+Roles
+
+Permissions
+
+Cloudtrail
+
+Cloud Watch
+
+VPC
+
+Subnets
+
+Routing tables
+
+Security Groups
+
+Aurora MySQL
+
+Aurora PostgreSQL
+
+ElastiCache Memached
+
+ElastiCache Redis
+
+EFS
+
+Load balancers
+
+NAT Gateways
+
+Internet Gateways
+
+Route 53 DNS
+
+Auto Scaling Groups (will be replaced in deploy job)""")
+    keepDependencies(false)
+    parameters {
+        stringParam("BRANCH", "develop", "Specify github branch name to deploy")
+        stringParam("ENVIRONMENT", "", """Specify environment name Eg: staging, release, uat""")
+        stringParam("SITE", "nova", "")
+    }
+    disabled(false)
+    concurrentBuild(true)
+    steps {
+        shell("bash ./StayNTouch/infrastructure-setup/build.sh")
+    }
+    configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+            strategy {
+                'daysToKeep'('3')
+                'numToKeep'('-1')
+                'artifactDaysToKeep'('-1')
+                'artifactNumToKeep'('-1')
+            }
+        }
+        it / 'properties' / 'com.coravy.hudson.plugins.github.GithubProjectProperty' {
+            'projectUrl'('https://github.com/StayNTouch/rover-cloud-formation/')
+            displayName()
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+            'autoRebuild'('false')
+            'rebuildDisabled'('false')
+        }
+    }
+}
+
 // Main view StyaNTouch
 
 listView("StayNTouch") {
