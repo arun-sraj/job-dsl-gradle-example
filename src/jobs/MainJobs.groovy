@@ -522,7 +522,7 @@ job("custvpn/custvpn-server-setup") {
             filterExecutors()
             jobs {
                 names("01-create-template-instance-from-chef-template-image-auth", "02-deploy-via-capistrano-to-template-instance-auth", "04-cleanup-auth")
-                regex("03-A-swap-asg-auth.+")
+                regex("03-.+-swap-asg-auth.+")
             }
             columns {
                 status()
@@ -540,7 +540,7 @@ job("custvpn/custvpn-server-setup") {
             filterExecutors()
             jobs {
                 names("01-create-template-instance-from-chef-template-image-ifc", "02-deploy-via-capistrano-to-template-instance-ifc", "04-cleanup-ifc")
-                regex("03-A-swap-asg-ifc.+")
+                regex("03-.+-swap-asg-ifc.+")
             }
             columns {
                 status()
@@ -558,7 +558,7 @@ job("custvpn/custvpn-server-setup") {
             filterExecutors()
             jobs {
                 names("01-create-template-instance-from-chef-template-image-pms", "02-deploy-via-capistrano-to-template-instance-pms", "04-cleanup-pms")
-                regex("03-A-swap-asg-pms.+")
+                regex("03-.+-swap-asg-pms.+")
             }
             columns {
                 status()
@@ -576,7 +576,7 @@ job("custvpn/custvpn-server-setup") {
             filterExecutors()
             jobs {
                 names("01-create-template-instance-from-chef-template-image-webhook", "02-deploy-via-capistrano-to-template-instance-webhook", "04-cleanup-webhook")
-                regex("03-A-swap-asg-webhook.+")
+                regex("03-.+-swap-asg-webhook.+")
             }
             columns {
                 status()
