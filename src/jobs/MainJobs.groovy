@@ -2306,6 +2306,42 @@ job("./restart-services/restart-webhook-wkr") {
         }
     }
 }
+
+// Secret-manager-setup
+
+job("secrets-manager-setup") {
+    description("This job will configure all AWS secret manager secrets needed for a new or updated environment/site.")
+    keepDependencies(false)
+    parameters {
+        stringParam("BRANCH", "develop", "Specify github branch name to deploy")
+        stringParam("ENVIRONMENT", "staging", """Specify environment name Eg: staging, release, uat""")
+        stringParam("SITE", "nova", "")
+    }
+    disabled(false)
+    concurrentBuild(true)
+    steps {
+        shell("bash ./StayNTouch/secrets-manager-setup/build.sh")
+    }
+    configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+            strategy {
+                'daysToKeep'('3')
+                'numToKeep'('-1')
+                'artifactDaysToKeep'('-1')
+                'artifactNumToKeep'('-1')
+            }
+        }
+        it / 'properties' / 'com.coravy.hudson.plugins.github.GithubProjectProperty' {
+            'projectUrl'('https://github.com/StayNTouch/rover-jenkins-scripts/')
+            displayName()
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+            'autoRebuild'('false')
+            'rebuildDisabled'('false')
+        }
+    }
+}
+
 // Main view StyaNTouch
 
 listView("StayNTouch") {
