@@ -1711,6 +1711,187 @@ Auto Scaling Groups (will be replaced in deploy job)""")
     }
 }
 
+// rake-task
+
+// Rake task main folder
+
+folder("rake-task") {
+    description "This folder includes the jobs for running the rake tasks in all applications."
+}
+
+// Rake task sub folders
+
+folder("rake-task/auth") {
+    description "This folder includes the job for running the rake tasks in auth."
+}
+
+folder("rake-task/ifc") {
+    description "This folder includes the job for running the rake tasks in ifc."
+}
+
+folder("rake-task/pms") {
+    description "This folder includes the job for running the rake tasks in pms."
+}
+
+folder("rake-task/webhook") {
+    description "This folder includes the job for running the rake tasks in webhook."
+}
+
+folder("rake-task/cleanup") {
+    description "This folder includes the job for running the rake tasks in webhook."
+}
+
+// Rake task jobs
+
+job("./rake-task/auth/auth-rake-task") {
+    description("This build is to run the rake task on auth.")
+    keepDependencies(false)
+    parameters {
+        stringParam("BRANCH", "develop", "Specify github branch name to deploy")
+        stringParam("ENVIRONMENT", "staging", """Specify environment name Eg: staging, release, uat""")
+        stringParam("SITE", "nova", """Specify site name Eg: nova, ohio""")
+        stringParam("RAKE_TASK_NAME", "", """Specify your rake task name and its argument if any. No need to specify RAILS_ENV For example: pms:purge_old_overlay_reservations[19]""")
+    }
+    disabled(false)
+    concurrentBuild(true)
+    steps {
+        shell("bash ./StayNTouch/utilities/rake-server/auth/build.sh")
+    }
+    configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+            strategy {
+                'daysToKeep'('3')
+                'numToKeep'('-1')
+                'artifactDaysToKeep'('-1')
+                'artifactNumToKeep'('-1')
+            }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+            'autoRebuild'('false')
+            'rebuildDisabled'('false')
+        }
+    }
+}
+
+job("./rake-task/ifc/ifc-rake-task") {
+    description("This build is to run the rake task on ifc.")
+    keepDependencies(false)
+    parameters {
+        stringParam("BRANCH", "develop", "Specify github branch name to deploy")
+        stringParam("ENVIRONMENT", "staging", """Specify environment name Eg: staging, release, uat""")
+        stringParam("SITE", "nova", """Specify site name Eg: nova, ohio""")
+        stringParam("RAKE_TASK_NAME", "", """Specify your rake task name and its argument if any. No need to specify RAILS_ENV For example: pms:purge_old_overlay_reservations[19]""")
+    }
+    disabled(false)
+    concurrentBuild(true)
+    steps {
+        shell("bash ./StayNTouch/utilities/rake-server/ifc/build.sh")
+    }
+    configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+            strategy {
+                'daysToKeep'('3')
+                'numToKeep'('-1')
+                'artifactDaysToKeep'('-1')
+                'artifactNumToKeep'('-1')
+            }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+            'autoRebuild'('false')
+            'rebuildDisabled'('false')
+        }
+    }
+}
+
+job("./rake-task/pms/pms-rake-task") {
+    description("This build is to run the rake task on pms.")
+    keepDependencies(false)
+    parameters {
+        stringParam("BRANCH", "develop", "Specify github branch name to deploy")
+        stringParam("ENVIRONMENT", "staging", """Specify environment name Eg: staging, release, uat""")
+        stringParam("SITE", "nova", """Specify site name Eg: nova, ohio""")
+        stringParam("RAKE_TASK_NAME", "", """Specify your rake task name and its argument if any. No need to specify RAILS_ENV For example: pms:purge_old_overlay_reservations[19]""")
+    }
+    disabled(false)
+    concurrentBuild(true)
+    steps {
+        shell("bash ./StayNTouch/utilities/rake-server/pms/build.sh")
+    }
+    configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+            strategy {
+                'daysToKeep'('3')
+                'numToKeep'('-1')
+                'artifactDaysToKeep'('-1')
+                'artifactNumToKeep'('-1')
+            }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+            'autoRebuild'('false')
+            'rebuildDisabled'('false')
+        }
+    }
+}
+
+job("./rake-task/webhook/webhook-rake-task") {
+    description("This build is to run the rake task on webhook.")
+    keepDependencies(false)
+    parameters {
+        stringParam("BRANCH", "develop", "Specify github branch name to deploy")
+        stringParam("ENVIRONMENT", "staging", """Specify environment name Eg: staging, release, uat""")
+        stringParam("SITE", "nova", """Specify site name Eg: nova, ohio""")
+        stringParam("RAKE_TASK_NAME", "", """Specify your rake task name and its argument if any. No need to specify RAILS_ENV For example: pms:purge_old_overlay_reservations[19]""")
+    }
+    disabled(false)
+    concurrentBuild(true)
+    steps {
+        shell("bash ./StayNTouch/utilities/rake-server/webhook/build.sh")
+    }
+    configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+            strategy {
+                'daysToKeep'('3')
+                'numToKeep'('-1')
+                'artifactDaysToKeep'('-1')
+                'artifactNumToKeep'('-1')
+            }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+            'autoRebuild'('false')
+            'rebuildDisabled'('false')
+        }
+    }
+}
+
+job("./rake-task/cleanup/clean-up-rake-task-on-failure") {
+    description("This build is to clean rake resources upon build failure.")
+    keepDependencies(false)
+    parameters {
+        stringParam("BRANCH", "develop", "Specify github branch name to deploy")
+        stringParam("ENVIRONMENT", "staging", """Specify environment name Eg: staging, release, uat""")
+        stringParam("SITE", "nova", """Specify site name Eg: nova, ohio""")
+        stringParam("APP_TYPE", "", "pms, ifc, auth, webhook")
+    }
+    disabled(false)
+    concurrentBuild(true)
+    steps {
+        shell("bash ./StayNTouch/utilities/rake-server/cleanup/build.sh")
+    }
+    configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+            strategy {
+                'daysToKeep'('3')
+                'numToKeep'('-1')
+                'artifactDaysToKeep'('-1')
+                'artifactNumToKeep'('-1')
+            }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+            'autoRebuild'('false')
+            'rebuildDisabled'('false')
+        }
+    }
+}
 // Main view StyaNTouch
 
 listView("StayNTouch") {
