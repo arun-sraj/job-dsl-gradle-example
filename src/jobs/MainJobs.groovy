@@ -2342,6 +2342,197 @@ job("secrets-manager-setup") {
     }
 }
 
+// Utilities folder
+
+folder("utilities") {
+    description "Running utility jobs."
+}
+
+// Utilities jobs
+
+job("./utilities/database-copy-scheduler-from-one-to-another-account") {
+    description("""This job will configure a database copy schedule between two accounts
+
+It will accept appropriate parameters like the source and destination account numbers/roles
+
+It configures the job to execute daily at 10:00 pm EST
+
+It will keep the last 2 snapshots
+
+It will load the source and destination CloudFormation templates into the respective accounts""")
+    keepDependencies(false)
+    parameters {
+        stringParam("BRANCH", "develop", "Specify GitHub branch name to deploy")
+        stringParam("SRC_ENVIRONMENT", "", """Specify environment name Eg: staging, release, uat""")
+        stringParam("DEST_ENVIRONMENT", "", """Specify environment name Eg: staging, release, uat""")
+        stringParam("AWS_REGION", "us-east-1", "Specify AWS region name")
+        stringParam("SRC_IAM_ROLE", "", "")
+        stringParam("DEST_IAM_ROLE", "", "")
+        stringParam("S3_PREFIX", "snt-cftemplates/dev", "")
+        stringParam("CODEBUCKET", "DEFAULT_BUCKET", "Name of the bucket that contains the lambda functions to deploy. Leave the default value to download the code from the AWS Managed buckets")
+        stringParam("CLUSTERNAMEPATTERN", "ALL_CLUSTERS", "Python regex for matching cluster identifiers to backup. Use \\\"ALL_CLUSTERS\\\" to back up every Aurora cluster in the region.")
+        stringParam("BACKUPINTERVAL", 24, "Interval for backups in hours. Default is 24")
+        stringParam("DESTINATIONACCOUNT", 525402942753, "Destination account number (ProdTest) with no dashes.")
+        stringParam("BACKUPSCHEDULE", "0 23", """Specify "minutes hours" in UTC. Backup schedule in Cloudwatch Event cron format. Needs to run at least once for every Interval. The default value runs once every at 6:00 PM EST.""")
+        stringParam("RETENTIONDAYS", 2, "Number of days to keep snapshots in retention before deleting them")
+        stringParam("LOGLEVEL", "ERROR", "Log level for Lambda functions (DEBUG, INFO, WARN, ERROR, CRITICAL are valid values).")
+        stringParam("SNAPSHOTPATTERN", "ALL_SNAPSHOTS", "Python regex for matching cluster identifiers to backup. Use \\\"ALL_SNAPSHOTS\\\" to back up every Aurora cluster in the region.")
+        stringParam("SITE", "nova", "")
+    }
+    disabled(false)
+    concurrentBuild(true)
+    steps {
+        shell("bash ./StayNTouch/database-copy-scheduler/build.sh")
+    }
+    configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+            strategy {
+                'daysToKeep'('3')
+                'numToKeep'('-1')
+                'artifactDaysToKeep'('-1')
+                'artifactNumToKeep'('-1')
+            }
+        }
+        it / 'properties' / 'com.coravy.hudson.plugins.github.GithubProjectProperty' {
+            'projectUrl'('https://github.com/StayNTouch/rover-cloud-formation/')
+            displayName()
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+            'autoRebuild'('false')
+            'rebuildDisabled'('false')
+        }
+    }
+}
+
+job("./utilities/database-disaster-recovery") {
+    description("""This job will configure a database copy schedule between two accounts
+
+It will accept appropriate parameters like the source and destination account numbers/roles
+
+It will keep the last 2 snapshots
+
+It will load the source and destination CloudFormation templates into the respective accounts""")
+    keepDependencies(false)
+    parameters {
+        stringParam("BRANCH", "develop", "Specify GitHub branch name to deploy")
+        stringParam("ENVIRONMENT", "", """Specify environment name Eg: staging, release, uat""")
+        stringParam("AWS_REGION", "us-east-1", "Specify AWS region name")
+        stringParam("DEST_AWS_REGION", "us-west-2", "Specify AWS region name")
+        stringParam("IAM_ROLE", "", "")
+        stringParam("CODEBUCKET", "DEFAULT_BUCKET", "Name of the bucket that contains the lambda functions to deploy. Leave the default value to download the code from the AWS Managed buckets")
+        stringParam("CROSSACCOUNTCOPY", FALSE, "Set to FALSE if your source snapshots are not on a different account")
+        stringParam("RETENTIONDAYS", 7, "Number of days to keep snapshots in retention before deleting them")
+        stringParam("LOGLEVEL", "ERROR", "Log level for Lambda functions (DEBUG, INFO, WARN, ERROR, CRITICAL are valid values).")
+        stringParam("SNAPSHOTPATTERN", "ALL_SNAPSHOTS", "Python regex for matching cluster identifiers to backup. Use \\\"ALL_SNAPSHOTS\\\" to back up every Aurora cluster in the region.")
+        stringParam("SITE", "nova", "")
+        stringParam("CREATE_SCHEDULE", "no", "")
+        stringParam("BACKUPINTERVAL", 1, "")
+        stringParam("BACKUPSCHEDULE", "0 23", "")
+        stringParam("CLUSTERNAMEPATTERN", "", "")
+    }
+    disabled(false)
+    concurrentBuild(true)
+    steps {
+        shell("bash ./StayNTouch/database-disaster-recovery/build.sh")
+    }
+    configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+            strategy {
+                'daysToKeep'('3')
+                'numToKeep'('-1')
+                'artifactDaysToKeep'('-1')
+                'artifactNumToKeep'('-1')
+            }
+        }
+        it / 'properties' / 'com.coravy.hudson.plugins.github.GithubProjectProperty' {
+            'projectUrl'('https://github.com/StayNTouch/rover-cloud-formation/')
+            displayName()
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+            'autoRebuild'('false')
+            'rebuildDisabled'('false')
+        }
+    }
+}
+
+job("./utilities/excavator-copy") {
+    description("This build is to run the excavator copy process.")
+    keepDependencies(false)
+    parameters {
+        stringParam("BRANCH", "develop", "Specify github branch name to deploy")
+        stringParam("ENVIRONMENT", "staging", """Specify environment name Eg: staging, release, uat""")
+        stringParam("SITE", "nova", """Specify site name Eg: nova, ohio""")
+        stringParam("AWS_REGION", "us-east-1", "Specify AWS region name")
+        stringParam("IAM_ROLE", "", "")
+        stringParam("EC2_KEY_PAIR", "", "Key pair name")
+        stringParam("MINE_NAME", "", "")
+        stringParam("MINE_MODEL", "", "")
+        stringParam("PMS_MODEL", "", "")
+        stringParam("CAP_ENVIRONMENT", "staging", "")
+    }
+    disabled(false)
+    concurrentBuild(true)
+    steps {
+        shell("bash ./StayNTouch/utilities/excavator/copy.sh")
+    }
+    configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+            strategy {
+                'daysToKeep'('3')
+                'numToKeep'('-1')
+                'artifactDaysToKeep'('-1')
+                'artifactNumToKeep'('-1')
+            }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+            'autoRebuild'('false')
+            'rebuildDisabled'('false')
+        }
+    }
+}
+
+job("./utilities/export-mysql") {
+    description("Exports mysql to a compressed dump file")
+    keepDependencies(false)
+    parameters {
+        stringParam("BRANCH", "develop", "Specify github branch name to deploy")
+        stringParam("ENVIRONMENT", "staging", """Specify environment name Eg: staging, release, uat""")
+        stringParam("SITE", "nova", """Specify site name Eg: nova, ohio""")
+        stringParam("AWS_REGION", "us-east-1", "Specify AWS region name")
+        stringParam("IAM_ROLE", "", "")
+        stringParam("DATABASE", "pms", "")
+    }
+    disabled(false)
+    concurrentBuild(true)
+    steps {
+        shell("bash ./StayNTouch/utilities/export-mysql.sh")
+    }
+    publishers {
+        archiveArtifacts {
+            pattern("*.sql.gz")
+            allowEmpty(false)
+            onlyIfSuccessful(false)
+            fingerprint(false)
+            defaultExcludes(true)
+        }
+    }
+    configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+            strategy {
+                'daysToKeep'('3')
+                'numToKeep'('-1')
+                'artifactDaysToKeep'('-1')
+                'artifactNumToKeep'('-1')
+            }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+            'autoRebuild'('false')
+            'rebuildDisabled'('false')
+        }
+    }
+}
+
+
 // Main view StyaNTouch
 
 listView("StayNTouch") {
@@ -2349,7 +2540,7 @@ listView("StayNTouch") {
     filterBuildQueue()
     filterExecutors()
     jobs {
-        names("aws-account-setup", "base-image-creator", "chef-setup", "custvpn", "deploy", "infrastructure-setup", "rake-task", "restart-services", "secrets-manager-setup")
+        names("aws-account-setup", "base-image-creator", "chef-setup", "custvpn", "deploy", "infrastructure-setup", "rake-task", "restart-services", "secrets-manager-setup", "utilities")
     }
     columns {
         status()
