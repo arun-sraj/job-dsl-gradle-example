@@ -2531,7 +2531,43 @@ job("./utilities/export-mysql") {
         }
     }
 }
+// workmail configuration
 
+// Workmail folder
+
+folder("workmail-configuration") {
+    description "Job to cofigure workmail."
+}
+
+job("./workmail-configuration/create-workmail-user") {
+    description("This build is to create workmail user/mailbox")
+    keepDependencies(false)
+    parameters {
+        stringParam("BRANCH", "develop", "Specify github branch name to deploy")
+        stringParam("USER_NAME", "", "user/mailbox name")
+        stringParam("AWS_REGION", "us-east-1", "AWS region.")
+    }
+    disabled(false)
+    concurrentBuild(false)
+    steps {
+        shell("""set -e
+bash ./StayNTouch/workmail-user-setup/build.sh""")
+    }
+    configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+            strategy {
+                'daysToKeep'('3')
+                'numToKeep'('-1')
+                'artifactDaysToKeep'('-1')
+                'artifactNumToKeep'('-1')
+            }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+            'autoRebuild'('false')
+            'rebuildDisabled'('false')
+        }
+    }
+}
 
 // Main view StyaNTouch
 
