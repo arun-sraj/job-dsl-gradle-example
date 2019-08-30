@@ -82,7 +82,7 @@ for (environment in environmentlist) {
       filterBuildQueue()
       filterExecutors()
       jobs {
-          names("aws-account-setup-$environment.key", "chef-setup-$environment.key")
+          names("aws-account-setup-$environment.key", "chef-setup-$environment.key", "deploy-$environment.key")
       }
       columns {
           status()
