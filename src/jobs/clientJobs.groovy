@@ -2,7 +2,7 @@
 import utilities.Templates
 import groovy.transform.ToString
 
-def environmentlist = [release:[branch: "develop", site: "nova"], uat:[branch: "develop", site: "nova"], prodtest:[branch: "develop", site: "nova"], awsstage:[branch: "develop", site: "nova"], prod:[branch: "develop", site: "nova"], prodeu:[branch: "develop", site: "eufr"]]
+def environmentlist = [release:[branch: "develop", site: "nova"], uat:[branch: "develop", site: "nova"], prodtest:[branch: "develop", site: "nova"], awsstage:[branch: "develop", site: "nova"], prod:[branch: "production", site: "nova"], prodeu:[branch: "production", site: "eufr"]]
 
 for (environment in environmentlist) {
   // Account Setup Job
@@ -42,6 +42,10 @@ for (environment in environmentlist) {
   def mqChefSetupJob = job("chef-setup-$environment.key/mq-$environment.key")
   Templates.mqChefSetup(mqChefSetupJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
 
+  // Chef Setup mq Server
+  def mqAppChefSetupJob = job("chef-setup-$environment.key/mq-app-$environment.key")
+  Templates.mqAppChefSetup(mqAppChefSetupJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+
   // Chef Setup pms Server
   def pmsChefSetupJob = job("chef-setup-$environment.key/pms-$environment.key")
   Templates.pmsChefSetup(pmsChefSetupJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
@@ -58,6 +62,12 @@ for (environment in environmentlist) {
   {
     def webhookChefSetupJob = job("chef-setup-$environment.key/webhook-$environment.key")
     Templates.webhookChefSetup(webhookChefSetupJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+  }
+  // Chef Setup excavator-copy service
+  if(!environment.equals("prodtest"))
+  {
+    def excavatorCopyJob = job("chef-setup-$environment.key/excavator-copy-$environment.key")
+    Templates.excavatorCopy(excavatorCopyJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
   }
 
   listView("$environment.key") {
