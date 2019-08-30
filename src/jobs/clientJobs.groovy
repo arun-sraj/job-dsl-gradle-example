@@ -70,6 +70,13 @@ for (environment in environmentlist) {
     Templates.excavatorCopy(excavatorCopyJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
   }
 
+// Deployment
+
+  //Deployment folder
+  def deployFolder = folder("deploy-$environment.key")
+  Templates.deployFolderSetup(deployFolder, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+
+
   listView("$environment.key") {
       description("Jobs for the $environment.key environment")
       filterBuildQueue()
