@@ -569,17 +569,17 @@ class Templates {
 // Deploy Folder
   static void deployFolderSetup(def folder, String environment, String site, String branch) {
     folder.with {
-      description "This job will deploy the template image to the auto scaling group for each template type.  We will need one job per env & application type.  The steps for each template type are: \
-      Create template instance from chef template image \
-      Deploy via capistrano to template instance (includes gulp, migrations) \
-      Shutdown template instance \
-      Create new deploy image from template instance \
-      Terminate template instance \
-      Create a new launch configuration associated with the deploy image (with user-data enabling / uncommenting startup scripts) \
-      Create and start a new auto scaling group for the launch configuration \
-      Swap load balancer to new auto scaling group in case of app servers \
-      Gracefully stop old auto scaling group \
-      Allows existing processes to finish gracefully \
+      description "This job will deploy the template image to the auto scaling group for each template type.  We will need one job per env & application type.  The steps for each template type are: \n \
+      Create template instance from chef template image \n \
+      Deploy via capistrano to template instance (includes gulp, migrations) \n \
+      Shutdown template instance \n \
+      Create new deploy image from template instance \n \
+      Terminate template instance \n \
+      Create a new launch configuration associated with the deploy image (with user-data enabling / uncommenting startup scripts) \n \
+      Create and start a new auto scaling group for the launch configuration \n \
+      Swap load balancer to new auto scaling group in case of app servers \n \
+      Gracefully stop old auto scaling group \n \
+      Allows existing processes to finish gracefully \n \
       Instance configured with 2.5 hour termination policy"
       views {
         listView("UI") {
