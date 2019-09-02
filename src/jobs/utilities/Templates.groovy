@@ -700,7 +700,7 @@ class Templates {
               failure("FAILURE")
             }
             parameters {
-                predefinedProp("BRANCH", "$branch")
+                predefinedProp("BRANCH", "$checkoutBranch")
                 predefinedProp("ENVIRONMENT", "$environment")
                 predefinedProp("SITE", "$site")
               }
@@ -714,7 +714,7 @@ class Templates {
               failure("FAILURE")
             }
             parameters {
-                predefinedProp("BRANCH", "$branch")
+                predefinedProp("BRANCH", "$checkoutBranch")
                 predefinedProp("ENVIRONMENT", "$environment")
                 predefinedProp("SITE", "$site")
               }
@@ -728,7 +728,7 @@ class Templates {
               failure("FAILURE")
             }
             parameters {
-                predefinedProp("BRANCH", "$branch")
+                predefinedProp("BRANCH", "$checkoutBranch")
                 predefinedProp("ENVIRONMENT", "$environment")
                 predefinedProp("SITE", "$site")
               }
@@ -742,7 +742,7 @@ class Templates {
               failure("FAILURE")
             }
             parameters {
-                predefinedProp("BRANCH", "$branch")
+                predefinedProp("BRANCH", "$checkoutBranch")
                 predefinedProp("ENVIRONMENT", "$environment")
                 predefinedProp("SITE", "$site")
               }
