@@ -700,10 +700,10 @@ class Templates {
               failure("FAILURE")
             }
             parameters {
-                predefinedProp("BRANCH", "$checkoutBranch")
-                predefinedProp("ENVIRONMENT", "$environment")
-                predefinedProp("SITE", "$site")
-              }
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+            }
           }
         }
         downstreamParameterized {
@@ -714,10 +714,10 @@ class Templates {
               failure("FAILURE")
             }
             parameters {
-                predefinedProp("BRANCH", "$checkoutBranch")
-                predefinedProp("ENVIRONMENT", "$environment")
-                predefinedProp("SITE", "$site")
-              }
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+            }
           }
         }
         downstreamParameterized {
@@ -728,10 +728,10 @@ class Templates {
               failure("FAILURE")
             }
             parameters {
-                predefinedProp("BRANCH", "$checkoutBranch")
-                predefinedProp("ENVIRONMENT", "$environment")
-                predefinedProp("SITE", "$site")
-              }
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+            }
           }
         }
         downstreamParameterized {
@@ -742,10 +742,10 @@ class Templates {
               failure("FAILURE")
             }
             parameters {
-                predefinedProp("BRANCH", "$checkoutBranch")
-                predefinedProp("ENVIRONMENT", "$environment")
-                predefinedProp("SITE", "$site")
-              }
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+            }
           }
         }
       }
@@ -802,9 +802,9 @@ class Templates {
               failure("FAILURE")
             }
             parameters {
-                predefinedProp("BRANCH", "$checkoutBranch")
-                predefinedProp("ENVIRONMENT", "$environment")
-                predefinedProp("SITE", "$site")
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
             }
           }
         }
@@ -816,9 +816,9 @@ class Templates {
               failure("FAILURE")
             }
             parameters {
-                predefinedProp("BRANCH", "$checkoutBranch")
-                predefinedProp("ENVIRONMENT", "$environment")
-                predefinedProp("SITE", "$site")
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
             }
           }
         }
@@ -830,9 +830,9 @@ class Templates {
               failure("FAILURE")
             }
             parameters {
-                predefinedProp("BRANCH", "$checkoutBranch")
-                predefinedProp("ENVIRONMENT", "$environment")
-                predefinedProp("SITE", "$site")
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
             }
           }
         }
@@ -844,9 +844,9 @@ class Templates {
               failure("FAILURE")
             }
             parameters {
-                predefinedProp("BRANCH", "$checkoutBranch")
-                predefinedProp("ENVIRONMENT", "$environment")
-                predefinedProp("SITE", "$site")
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
             }
           }
         }
@@ -905,9 +905,9 @@ class Templates {
               failure("FAILURE")
             }
             parameters {
-                predefinedProp("BRANCH", "$checkoutBranch")
-                predefinedProp("ENVIRONMENT", "$environment")
-                predefinedProp("SITE", "$site")
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
             }
           }
         }
@@ -919,9 +919,9 @@ class Templates {
               failure("FAILURE")
             }
             parameters {
-                predefinedProp("BRANCH", "$checkoutBranch")
-                predefinedProp("ENVIRONMENT", "$environment")
-                predefinedProp("SITE", "$site")
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
             }
           }
         }
@@ -933,9 +933,9 @@ class Templates {
               failure("FAILURE")
             }
             parameters {
-                predefinedProp("BRANCH", "$checkoutBranch")
-                predefinedProp("ENVIRONMENT", "$environment")
-                predefinedProp("SITE", "$site")
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
             }
           }
         }
@@ -947,9 +947,9 @@ class Templates {
               failure("FAILURE")
             }
             parameters {
-                predefinedProp("BRANCH", "$checkoutBranch")
-                predefinedProp("ENVIRONMENT", "$environment")
-                predefinedProp("SITE", "$site")
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
             }
           }
         }
@@ -968,6 +968,108 @@ class Templates {
         }
         it / 'properties' / 'com.coravy.hudson.plugins.github.GithubProjectProperty' {
           'projectUrl'('git@github.com:StayNTouch/rover-ifc.git/')
+          displayName()
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+          'autoRebuild'('false')
+          'rebuildDisabled'('false')
+        }
+      }
+    }
+  }
+  static void webhookDelpoySetup(def job, String environment, String site, String checkoutBranch) {
+    job.with {
+      description()
+      keepDependencies(false)
+      blockOn(".*restart-webhook.*-$environment", {
+        blockLevel("GLOBAL")
+        scanQueueFor("DISABLED")
+      })
+      scm {
+        git {
+          remote {
+            github("StayNTouch/rover-webhook", "ssh")
+          }
+          branch("origin/$checkoutBranch")
+        }
+      }
+      disabled(false)
+      triggers {
+        githubPush()
+      }
+      concurrentBuild(false)
+      steps {
+        downstreamParameterized {
+          trigger("../deploy/01-create-template-instance-from-chef-template-image-webhook") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+            }
+          }
+        }
+        downstreamParameterized {
+          trigger("../deploy/02-deploy-via-capistrano-to-template-instance-webhook") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+            }
+          }
+        }
+        downstreamParameterized {
+          trigger("../deploy/03-A-swap-asg-webhook-wkr,../deploy/03-B-swap-asg-webhook-ipc,../deploy/03-C-swap-asg-webhook-railsc") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+            }
+          }
+        }
+        downstreamParameterized {
+          trigger("../deploy/04-cleanup-webhook") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+            }
+          }
+        }
+      }
+      publishers {
+        mailer("devops@stayntouch.com release@stayntouch.com", false, true)
+      }
+      configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+          strategy {
+            'daysToKeep'('3')
+            'numToKeep'('-1')
+            'artifactDaysToKeep'('-1')
+            'artifactNumToKeep'('-1')
+          }
+        }
+        it / 'properties' / 'com.coravy.hudson.plugins.github.GithubProjectProperty' {
+          'projectUrl'('git@github.com:StayNTouch/rover-webhook.git/')
           displayName()
         }
         it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {

@@ -91,6 +91,22 @@ for (environment in environmentlist) {
     Templates.pmsDelpoySetup(pmsDeployJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
   }
 
+  // Ifc deploy job
+
+  if(!environment.equals("prodtest"))
+  {
+    def ifcDeployJob = job("deploy-$environment.key/ifc-$environment.key-deploy")
+    Templates.ifcDelpoySetup(ifcDeployJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+  }
+
+  // Webhook deploy job
+
+  if(!environment.equals("prodtest"))
+  {
+    def webhookDeployJob = job("deploy-$environment.key/webhook-$environment.key-deploy")
+    Templates.webhookDelpoySetup(webhookDeployJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+  }
+
   listView("$environment.key") {
       description("Jobs for the $environment.key environment")
       filterBuildQueue()
