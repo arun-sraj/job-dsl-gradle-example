@@ -670,7 +670,7 @@ class Templates {
       }
     }
   }
-  static void authDelpoySetup(def job, String environment, String site, String branch) {
+  static void authDelpoySetup(def job, String environment, String site, String checkoutBranch) {
     job.with {
       description()
       keepDependencies(false)
@@ -683,7 +683,7 @@ class Templates {
           remote {
             github("StayNTouch/rover-auth", "ssh")
           }
-          branch('origin/develop')
+          branch("origin/$checkoutBranch")
         }
       }
       disabled(false)
