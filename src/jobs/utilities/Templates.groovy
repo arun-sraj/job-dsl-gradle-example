@@ -670,7 +670,108 @@ class Templates {
       }
     }
   }
-
+  static void webhookDelpoySetup(def job, String environment, String site, String branch) {
+    job.with {
+      description()
+      keepDependencies(false)
+      blockOn(".*restart-auth.*-$environment", {
+        blockLevel("GLOBAL")
+        scanQueueFor("DISABLED")
+      })
+      scm {
+        git {
+          remote {
+            github("StayNTouch/rover-auth", "ssh")
+          }
+          branch("origin/$branch")
+        }
+      }
+      disabled(false)
+      triggers {
+        githubPush()
+      }
+      concurrentBuild(false)
+      steps {
+        downstreamParameterized {
+          trigger("../deploy/01-create-template-instance-from-chef-template-image-auth") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+                predefinedProp("BRANCH", "$branch")
+                predefinedProp("ENVIRONMENT", "$environment")
+                predefinedProp("SITE", "$site")
+              }
+          }
+        }
+        downstreamParameterized {
+          trigger("../deploy/02-deploy-via-capistrano-to-template-instance-auth") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+                predefinedProp("BRANCH", "$branch")
+                predefinedProp("ENVIRONMENT", "$environment")
+                predefinedProp("SITE", "$site")
+              }
+          }
+        }
+        downstreamParameterized {
+          trigger("../deploy/03-A-swap-asg-auth-app,../deploy/03-B-swap-asg-auth-wkr,../deploy/03-C-swap-asg-auth-ipc,../deploy/03-D-swap-asg-auth-railsc") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+                predefinedProp("BRANCH", "$branch")
+                predefinedProp("ENVIRONMENT", "$environment")
+                predefinedProp("SITE", "$site")
+              }
+          }
+        }
+        downstreamParameterized {
+          trigger("../deploy/04-cleanup-auth") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+                predefinedProp("BRANCH", "$branch")
+                predefinedProp("ENVIRONMENT", "$environment")
+                predefinedProp("SITE", "$site")
+              }
+          }
+        }
+      }
+      publishers {
+        mailer("devops@stayntouch.com release@stayntouch.com", false, true)
+      }
+      configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+          strategy {
+            'daysToKeep'('3')
+            'numToKeep'('-1')
+            'artifactDaysToKeep'('-1')
+            'artifactNumToKeep'('-1')
+          }
+        }
+        it / 'properties' / 'com.coravy.hudson.plugins.github.GithubProjectProperty' {
+          'projectUrl'('git@github.com:StayNTouch/rover-auth.git/')
+          displayName()
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+          'autoRebuild'('false')
+          'rebuildDisabled'('false')
+        }
+      }
+    }
+  }
 // class close
 }
 
