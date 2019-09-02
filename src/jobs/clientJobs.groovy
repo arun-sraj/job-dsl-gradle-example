@@ -107,6 +107,30 @@ for (environment in environmentlist) {
     Templates.webhookDelpoySetup(webhookDeployJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
   }
 
+  // excavator deploy job
+
+  if(!environment.equals("prodtest"))
+  {
+    def excavatorDelpoyJob = job("deploy-$environment.key/excavator-$environment.key-deploy")
+    Templates.excavatorDelpoySetup(excavatorDelpoyJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+  }
+
+  // Zest Web deploy job
+
+  if(!environment.equals("prodtest"))
+  {
+    def zestWebkDelpoyJob = job("deploy-$environment.key/zest-web-$environment.key-deploy")
+    Templates.zestWebkDelpoySetup(zestWebkDelpoyJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+  }
+
+  // Zest Ui deploy job
+
+  if(!environment.equals("prodtest"))
+  {
+    def zestUiDelpoyJob = job("deploy-$environment.key/zest-ui-$environment.key-deploy")
+    Templates.zestUiDelpoySetup(zestUiDelpoyJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+  }
+
   listView("$environment.key") {
       description("Jobs for the $environment.key environment")
       filterBuildQueue()

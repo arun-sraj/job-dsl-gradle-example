@@ -667,6 +667,23 @@ class Templates {
                 buildButton()
             }
         }
+        listView("excavator") {
+            description("excavator deploy jobs")
+            filterBuildQueue()
+            filterExecutors()
+            jobs {
+                names("excavator-$environment-deploy")
+            }
+            columns {
+                status()
+                weather()
+                name()
+                lastSuccess()
+                lastFailure()
+                lastDuration()
+                buildButton()
+            }
+        }
       }
     }
   }
@@ -1070,6 +1087,168 @@ class Templates {
         }
         it / 'properties' / 'com.coravy.hudson.plugins.github.GithubProjectProperty' {
           'projectUrl'('git@github.com:StayNTouch/rover-webhook.git/')
+          displayName()
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+          'autoRebuild'('false')
+          'rebuildDisabled'('false')
+        }
+      }
+    }
+  }
+  static void excavatorDelpoySetup(def job, String environment, String site, String checkoutBranch) {
+    job.with {
+      description()
+      keepDependencies(false)
+      scm {
+        git {
+          remote {
+            github("StayNTouch/rover-excavator", "ssh")
+          }
+          branch("origin/$checkoutBranch")
+        }
+      }
+      disabled(false)
+      triggers {
+        githubPush()
+      }
+      concurrentBuild(false)
+      steps {
+        downstreamParameterized {
+          trigger("../deploy/excavator") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+            }
+          }
+        }
+      }
+      publishers {
+        mailer("devops@stayntouch.com release@stayntouch.com", false, true)
+      }
+      configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+          strategy {
+            'daysToKeep'('3')
+            'numToKeep'('-1')
+            'artifactDaysToKeep'('-1')
+            'artifactNumToKeep'('-1')
+          }
+        }
+        it / 'properties' / 'com.coravy.hudson.plugins.github.GithubProjectProperty' {
+          'projectUrl'('git@github.com:StayNTouch/rover-excavator.git/')
+          displayName()
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+          'autoRebuild'('false')
+          'rebuildDisabled'('false')
+        }
+      }
+    }
+  }
+  static void zestWebkDelpoySetup(def job, String environment, String site, String checkoutBranch) {
+    job.with {
+      description("Build rover zest web UI app and sync into zest web app s3 bucket")
+      keepDependencies(false)
+      scm {
+        git {
+          remote {
+            github("StayNTouch/rover-zest-web", "ssh")
+          }
+          branch("origin/$checkoutBranch")
+        }
+      }
+      disabled(false)
+      triggers {
+        githubPush()
+      }
+      concurrentBuild(false)
+      steps {
+        downstreamParameterized {
+          trigger("../deploy/rover-zest-web") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+            }
+          }
+        }
+      }
+      configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+          strategy {
+            'daysToKeep'('3')
+            'numToKeep'('-1')
+            'artifactDaysToKeep'('-1')
+            'artifactNumToKeep'('-1')
+          }
+        }
+        it / 'properties' / 'com.coravy.hudson.plugins.github.GithubProjectProperty' {
+          'projectUrl'('git@github.com:StayNTouch/rover-zest-web.git/')
+          displayName()
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+          'autoRebuild'('false')
+          'rebuildDisabled'('false')
+        }
+      }
+    }
+  }
+  static void zestUiDelpoySetup(def job, String environment, String site, String checkoutBranch) {
+    job.with {
+      description("Build rover login UI app and sync into login app s3 bucket")
+      keepDependencies(false)
+      scm {
+        git {
+          remote {
+            github("StayNTouch/rover-ui-shared", "ssh")
+          }
+          branch("origin/$checkoutBranch")
+        }
+      }
+      disabled(false)
+      triggers {
+        githubPush()
+      }
+      concurrentBuild(false)
+      steps {
+        downstreamParameterized {
+          trigger("../deploy/rover-zest-web") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+            }
+          }
+        }
+      }
+      configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+          strategy {
+            'daysToKeep'('3')
+            'numToKeep'('-1')
+            'artifactDaysToKeep'('-1')
+            'artifactNumToKeep'('-1')
+          }
+        }
+        it / 'properties' / 'com.coravy.hudson.plugins.github.GithubProjectProperty' {
+          'projectUrl'('git@github.com:StayNTouch/rover-ui-shared.git/')
           displayName()
         }
         it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
