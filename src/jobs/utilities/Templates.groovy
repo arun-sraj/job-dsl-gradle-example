@@ -874,6 +874,109 @@ class Templates {
       }
     }
   }
+
+  static void ifcDelpoySetup(def job, String environment, String site, String checkoutBranch) {
+    job.with {
+      description()
+      keepDependencies(false)
+      blockOn(".*restart-ifc.*-$environment", {
+        blockLevel("GLOBAL")
+        scanQueueFor("DISABLED")
+      })
+      scm {
+        git {
+          remote {
+            github("StayNTouch/rover-ifc", "ssh")
+          }
+          branch("origin/$checkoutBranch")
+        }
+      }
+      disabled(false)
+      triggers {
+        githubPush()
+      }
+      concurrentBuild(false)
+      steps {
+        downstreamParameterized {
+          trigger("../deploy/01-create-template-instance-from-chef-template-image-ifc") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+                predefinedProp("BRANCH", "$checkoutBranch")
+                predefinedProp("ENVIRONMENT", "$environment")
+                predefinedProp("SITE", "$site")
+            }
+          }
+        }
+        downstreamParameterized {
+          trigger("../deploy/02-deploy-via-capistrano-to-template-instance-ifc") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+                predefinedProp("BRANCH", "$checkoutBranch")
+                predefinedProp("ENVIRONMENT", "$environment")
+                predefinedProp("SITE", "$site")
+            }
+          }
+        }
+        downstreamParameterized {
+          trigger("../deploy/03-A-swap-asg-ifc-app,../deploy/03-B-swap-asg-ifc-wkr,../deploy/03-C-swap-asg-ifc-skd,../deploy/03-D-swap-asg-ifc-ipc,../deploy/03-E-swap-asg-ifc-railsc") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+                predefinedProp("BRANCH", "$checkoutBranch")
+                predefinedProp("ENVIRONMENT", "$environment")
+                predefinedProp("SITE", "$site")
+            }
+          }
+        }
+        downstreamParameterized {
+          trigger("../deploy/04-cleanup-ifc") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+                predefinedProp("BRANCH", "$checkoutBranch")
+                predefinedProp("ENVIRONMENT", "$environment")
+                predefinedProp("SITE", "$site")
+            }
+          }
+        }
+      }
+      publishers {
+        mailer("devops@stayntouch.com release@stayntouch.com", false, true)
+      }
+      configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+          strategy {
+            'daysToKeep'('3')
+            'numToKeep'('-1')
+            'artifactDaysToKeep'('-1')
+            'artifactNumToKeep'('-1')
+          }
+        }
+        it / 'properties' / 'com.coravy.hudson.plugins.github.GithubProjectProperty' {
+          'projectUrl'('git@github.com:StayNTouch/rover-ifc.git/')
+          displayName()
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+          'autoRebuild'('false')
+          'rebuildDisabled'('false')
+        }
+      }
+    }
+  }
 // class close
 }
 
