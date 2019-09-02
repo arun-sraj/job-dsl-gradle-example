@@ -683,7 +683,7 @@ class Templates {
           remote {
             github("StayNTouch/rover-auth", "ssh")
           }
-          branch("develop")
+          branch('origin/develop')
         }
       }
       disabled(false)
