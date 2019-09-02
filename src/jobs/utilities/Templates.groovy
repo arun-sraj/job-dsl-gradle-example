@@ -670,7 +670,7 @@ class Templates {
       }
     }
   }
-  static void authDelpoySetup(def job, String environment, String site, String branch) {
+  static void authDelpoySetup(def job, String environment, String site, def branch) {
     job.with {
       description()
       keepDependencies(false)
