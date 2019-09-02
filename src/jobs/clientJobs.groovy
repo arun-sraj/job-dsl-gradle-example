@@ -79,7 +79,7 @@ for (environment in environmentlist) {
 
   if(!environment.equals("prodtest"))
   {
-    def authDeployJob = job("chef-setup-$environment.key/excavator-copy-$environment.key")
+    def authDeployJob = job("deploy-$environment.key/auth-$environment.key-deploy")
     Templates.authDelpoySetup(authDeployJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
   }
 
