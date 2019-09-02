@@ -72,10 +72,16 @@ for (environment in environmentlist) {
 
 // Deployment
 
-  //Deployment folder
+  // Deployment folder
   def deployFolder = folder("deploy-$environment.key")
   Templates.deployFolderSetup(deployFolder, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+  // Auth deploy job
 
+  if(!environment.equals("prodtest"))
+  {
+    def authDeployJob = job("chef-setup-$environment.key/excavator-copy-$environment.key")
+    Templates.authDelpoySetup(authDeployJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+  }
 
   listView("$environment.key") {
       description("Jobs for the $environment.key environment")

@@ -670,7 +670,7 @@ class Templates {
       }
     }
   }
-  static void webhookDelpoySetup(def job, String environment, String site, String branch) {
+  static void authDelpoySetup(def job, String environment, String site, String branch) {
     job.with {
       description()
       keepDependencies(false)
