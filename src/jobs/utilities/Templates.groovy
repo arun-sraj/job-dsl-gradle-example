@@ -772,6 +772,108 @@ class Templates {
       }
     }
   }
+  static void pmsDelpoySetup(def job, String environment, String site, String checkoutBranch) {
+    job.with {
+      description()
+      keepDependencies(false)
+      blockOn(".*restart-pms.*-$environment", {
+        blockLevel("GLOBAL")
+        scanQueueFor("DISABLED")
+      })
+      scm {
+        git {
+          remote {
+            github("StayNTouch/pms", "ssh")
+          }
+          branch("origin/$checkoutBranch")
+        }
+      }
+      disabled(false)
+      triggers {
+        githubPush()
+      }
+      concurrentBuild(false)
+      steps {
+        downstreamParameterized {
+          trigger("../deploy/01-create-template-instance-from-chef-template-image-pms") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+                predefinedProp("BRANCH", "$checkoutBranch")
+                predefinedProp("ENVIRONMENT", "$environment")
+                predefinedProp("SITE", "$site")
+            }
+          }
+        }
+        downstreamParameterized {
+          trigger("../deploy/02-deploy-via-capistrano-to-template-instance-pms") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+                predefinedProp("BRANCH", "$checkoutBranch")
+                predefinedProp("ENVIRONMENT", "$environment")
+                predefinedProp("SITE", "$site")
+            }
+          }
+        }
+        downstreamParameterized {
+          trigger("../deploy/03-A-swap-asg-pms-app,../deploy/03-B-swap-asg-pms-con,../deploy/03-C-swap-asg-pms-rsq,../deploy/03-D-swap-asg-pms-wkr,../deploy/03-E-swap-asg-pms-ipc,../deploy/03-F-swap-asg-pms-railsc") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+                predefinedProp("BRANCH", "$checkoutBranch")
+                predefinedProp("ENVIRONMENT", "$environment")
+                predefinedProp("SITE", "$site")
+            }
+          }
+        }
+        downstreamParameterized {
+          trigger("../deploy/04-cleanup-pms") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+                predefinedProp("BRANCH", "$checkoutBranch")
+                predefinedProp("ENVIRONMENT", "$environment")
+                predefinedProp("SITE", "$site")
+            }
+          }
+        }
+      }
+      publishers {
+        mailer("devops@stayntouch.com release@stayntouch.com", false, true)
+      }
+      configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+          strategy {
+            'daysToKeep'('3')
+            'numToKeep'('-1')
+            'artifactDaysToKeep'('-1')
+            'artifactNumToKeep'('-1')
+          }
+        }
+        it / 'properties' / 'com.coravy.hudson.plugins.github.GithubProjectProperty' {
+          'projectUrl'('git@github.com:StayNTouch/pms.git/')
+          displayName()
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+          'autoRebuild'('false')
+          'rebuildDisabled'('false')
+        }
+      }
+    }
+  }
 // class close
 }
 

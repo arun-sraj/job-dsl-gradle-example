@@ -83,6 +83,14 @@ for (environment in environmentlist) {
     Templates.authDelpoySetup(authDeployJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
   }
 
+  // Pms deploy job
+
+  if(!environment.equals("prodtest"))
+  {
+    def pmsDeployJob = job("deploy-$environment.key/pms-$environment.key-deploy")
+    Templates.pmsDelpoySetup(pmsDeployJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+  }
+
   listView("$environment.key") {
       description("Jobs for the $environment.key environment")
       filterBuildQueue()
