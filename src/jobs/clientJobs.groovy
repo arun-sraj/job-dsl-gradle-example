@@ -143,6 +143,12 @@ for (environment in environmentlist) {
     Templates.rakeAuthSetup(rakeAuthJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
   }
 
+  if(!environment.equals("prodtest"))
+  {
+    def rakeIfcJob = job("rake-task-$environment.key/run-rake-task-ifc-$environment.key")
+    Templates.rakeIfcSetup(rakeIfcJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+  }
+
   listView("$environment.key") {
       description("Jobs for the $environment.key environment")
       filterBuildQueue()

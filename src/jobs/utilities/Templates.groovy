@@ -1351,6 +1351,75 @@ pms:update_future_transactions -- --hotel_code="HS1234" --from_date="2017-08-01"
               predefinedProp("BRANCH", "$checkoutBranch")
               predefinedProp("ENVIRONMENT", "$environment")
               predefinedProp("SITE", "$site")
+              predefinedProp("APP_TYPE", "auth")
+            }
+          }
+        }
+      }
+      publishers {
+        mailer("devops@stayntouch.com release@stayntouch.com", false, true)
+      }
+      configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+          strategy {
+            'daysToKeep'('3')
+            'numToKeep'('-1')
+            'artifactDaysToKeep'('-1')
+            'artifactNumToKeep'('-1')
+          }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+          'autoRebuild'('false')
+          'rebuildDisabled'('false')
+        }
+      }
+    }
+  }
+  static void rakeIfcSetup(def job, String environment, String site, String checkoutBranch) {
+    job.with {
+      description("Running rake task for ifc.")
+      keepDependencies(false)
+      parameters {
+        stringParam("RAKE_TASK_NAME", "", """Here are some examples of values to enter: \
+No parameters: \
+lhm:cleanup \
+Standard Parameters: \
+pms:generate_folio_number_for_past_checkout_reservation_bills[HOTELA,HOTELB] \
+Standard Parameters With Spaces (wrap with quotes): \
+"pms:link_refunds_in_ar_transactions[CODE WITH SPACES]" \
+Option Parser Parameters: \
+pms:update_future_transactions -- --hotel_code="HS1234" --from_date="2017-08-01" --to_date="2017-11-13""")
+      }
+      disabled(false)
+      concurrentBuild(true)
+      steps {
+        downstreamParameterized {
+          trigger("../rake-task/ifc/ifc-rake-task") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+              predefinedProp("APP_TYPE", "ifc-")
+            }
+          }
+        }
+        downstreamParameterized {
+          trigger("../rake-task/ifc/ifc-rake-task") {
+            block {
+              buildStepFailure("SUCCESS")
+              unstable("SUCCESS")
+              failure("SUCCESS")
+            }
+            parameters {
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+              predefinedProp("APP_TYPE", "ifc-")
             }
           }
         }
