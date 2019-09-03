@@ -132,8 +132,10 @@ for (environment in environmentlist) {
   // Rake setup
 
   // Rake Folder Setup
-  def rakeFolder = folder("rake-task-$environment.key")
-  Templates.rakeFolderSetup(rakeFolder, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+  folder("rake-task-$environment.key")
+  {
+    description "This folder includes the jobs for running the rake tasks in all applications for the environment $environment.key."
+  }
 
   if(!environment.equals("prodtest"))
   {
