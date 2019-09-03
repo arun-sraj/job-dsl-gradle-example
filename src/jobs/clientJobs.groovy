@@ -75,8 +75,8 @@ for (environment in environmentlist) {
   // Deployment folder
   def deployFolder = folder("deploy-$environment.key")
   Templates.deployFolderSetup(deployFolder, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
-  // Auth deploy job
 
+  // Auth deploy job
   if(!environment.equals("prodtest"))
   {
     def authDeployJob = job("deploy-$environment.key/auth-$environment.key-deploy")
@@ -84,7 +84,6 @@ for (environment in environmentlist) {
   }
 
   // Pms deploy job
-
   if(!environment.equals("prodtest"))
   {
     def pmsDeployJob = job("deploy-$environment.key/pms-$environment.key-deploy")
@@ -92,7 +91,6 @@ for (environment in environmentlist) {
   }
 
   // Ifc deploy job
-
   if(!environment.equals("prodtest"))
   {
     def ifcDeployJob = job("deploy-$environment.key/ifc-$environment.key-deploy")
@@ -100,7 +98,6 @@ for (environment in environmentlist) {
   }
 
   // Webhook deploy job
-
   if(!environment.equals("prodtest"))
   {
     def webhookDeployJob = job("deploy-$environment.key/webhook-$environment.key-deploy")
@@ -108,7 +105,6 @@ for (environment in environmentlist) {
   }
 
   // excavator deploy job
-
   if(!environment.equals("prodtest"))
   {
     def excavatorDelpoyJob = job("deploy-$environment.key/excavator-$environment.key-deploy")
@@ -116,7 +112,6 @@ for (environment in environmentlist) {
   }
 
   // Zest Web deploy job
-
   if(!environment.equals("prodtest"))
   {
     def zestWebkDelpoyJob = job("deploy-$environment.key/zest-web-$environment.key-deploy")
@@ -124,7 +119,6 @@ for (environment in environmentlist) {
   }
 
   // Zest Ui deploy job
-
   if(!environment.equals("prodtest"))
   {
     def zestUiDelpoyJob = job("deploy-$environment.key/zest-ui-$environment.key-deploy")
@@ -132,16 +126,27 @@ for (environment in environmentlist) {
   }
 
   // Infra deploy job
-
   def infraDelpoyJob = job("infrastructure-setup-$environment.key")
   Templates.infraDelpoySetup(infraDelpoyJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+
+  // Rake setup
+
+  // Rake Folder Setup
+  def rakeFolder = folder("rake-task-$environment.key")
+  Templates.rakeFolderSetup(rakeFolder, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+
+  if(!environment.equals("prodtest"))
+  {
+    def rakeAuthJob = job("rake-task-$environment.key/run-rake-task-auth-$environment.key")
+    Templates.rakeAuthSetup(rakeAuthJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+  }
 
   listView("$environment.key") {
       description("Jobs for the $environment.key environment")
       filterBuildQueue()
       filterExecutors()
       jobs {
-          names("aws-account-setup-$environment.key", "chef-setup-$environment.key", "deploy-$environment.key", "infrastructure-setup-$environment.key")
+          names("aws-account-setup-$environment.key", "chef-setup-$environment.key", "deploy-$environment.key", "infrastructure-setup-$environment.key", "rake-task-$environment.key")
       }
       columns {
           status()

@@ -569,17 +569,17 @@ class Templates {
 // Deploy Folder
   static void deployFolderSetup(def folder, String environment, String site, String branch) {
     folder.with {
-      description "This job will deploy the template image to the auto scaling group for each template type.  We will need one job per env & application type.  The steps for each template type are: \n \
-      Create template instance from chef template image \n \
-      Deploy via capistrano to template instance (includes gulp, migrations) \n \
-      Shutdown template instance \n \
-      Create new deploy image from template instance \n \
-      Terminate template instance \n \
-      Create a new launch configuration associated with the deploy image (with user-data enabling / uncommenting startup scripts) \n \
-      Create and start a new auto scaling group for the launch configuration \n \
-      Swap load balancer to new auto scaling group in case of app servers \n \
-      Gracefully stop old auto scaling group \n \
-      Allows existing processes to finish gracefully \n \
+      description "This job will deploy the template image to the auto scaling group for each template type.  We will need one job per env & application type.  The steps for each template type are: \
+      Create template instance from chef template image \
+      Deploy via capistrano to template instance (includes gulp, migrations) \
+      Shutdown template instance \
+      Create new deploy image from template instance \
+      Terminate template instance \
+      Create a new launch configuration associated with the deploy image (with user-data enabling / uncommenting startup scripts) \
+      Create and start a new auto scaling group for the launch configuration \
+      Swap load balancer to new auto scaling group in case of app servers \
+      Gracefully stop old auto scaling group \
+      Allows existing processes to finish gracefully \
       Instance configured with 2.5 hour termination policy"
       views {
         listView("UI") {
@@ -1261,26 +1261,28 @@ class Templates {
   static void infraDelpoySetup(def job, String environment, String site, String checkoutBranch) {
     job.with {
       description("""
-                  This job will configure all AWS services needed for a new or updated environment/site.  The job will run one parent Cloudformation template with nested child templates.  The setup includes: \n \
-                  Account setup \n \
-                  Roles \n \
-                  Permissions \n \
-                  Cloudtrail \n \
-                  Cloud Watch \n \
-                  VPC \n \
-                  Subnets \n \
-                  Routing tables \n \
-                  Security Groups \n \
-                  Aurora MySQL \n \
-                  Aurora PostgreSQL \n \
-                  ElastiCache Memached \n \
-                  ElastiCache Redis \n \
-                  EFS \n \
-                  Load balancers \n \
-                  NAT Gateways \n \
-                  Internet Gateways \n \
-                  Route 53 DNS \n \
-                  Auto Scaling Groups (will be replaced in deploy job) \n \
+                  This job will configure all AWS services needed for a new or updated environment/site. \
+                  The job will run one parent Cloudformation template with nested child templates.  The setup includes: \
+
+                  Account setup \
+                  Roles \
+                  Permissions \
+                  Cloudtrail \
+                  Cloud Watch \
+                  VPC \
+                  Subnets \
+                  Routing tables \
+                  Security Groups \
+                  Aurora MySQL \
+                  Aurora PostgreSQL \
+                  ElastiCache Memached \
+                  ElastiCache Redis \
+                  EFS \
+                  Load balancers \
+                  NAT Gateways \
+                  Internet Gateways \
+                  Route 53 DNS \
+                  Auto Scaling Groups (will be replaced in deploy job) \
                   """)
       keepDependencies(false)
       disabled(false)
@@ -1303,6 +1305,62 @@ class Templates {
       }
       publishers {
         mailer("devops@stayntouch.com", false, true)
+      }
+      configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+          strategy {
+            'daysToKeep'('3')
+            'numToKeep'('-1')
+            'artifactDaysToKeep'('-1')
+            'artifactNumToKeep'('-1')
+          }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+          'autoRebuild'('false')
+          'rebuildDisabled'('false')
+        }
+      }
+    }
+  }
+  static void rakeAuthSetup(def job, String environment, String site, String checkoutBranch) {
+    job.with {
+      description("Running rake task for auth.")
+      keepDependencies(false)
+      parameters {
+        stringParam("RAKE_TASK_NAME", "", """Here are some examples of values to enter:
+
+No parameters:
+lhm:cleanup
+
+Standard Parameters:
+pms:generate_folio_number_for_past_checkout_reservation_bills[HOTELA,HOTELB]
+
+Standard Parameters With Spaces (wrap with quotes):
+"pms:link_refunds_in_ar_transactions[CODE WITH SPACES]"
+
+Option Parser Parameters:
+pms:update_future_transactions -- --hotel_code="HS1234" --from_date="2017-08-01" --to_date="2017-11-13"""")
+      }
+      disabled(false)
+      concurrentBuild(true)
+      steps {
+        downstreamParameterized {
+          trigger("../rake-task/auth/auth-rake-task") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+            }
+          }
+        }
+      }
+      publishers {
+        mailer("devops@stayntouch.com release@stayntouch.com", false, true)
       }
       configure {
         it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
