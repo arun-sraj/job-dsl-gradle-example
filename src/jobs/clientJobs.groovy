@@ -131,12 +131,17 @@ for (environment in environmentlist) {
     Templates.zestUiDelpoySetup(zestUiDelpoyJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
   }
 
+  // Infra deploy job
+
+  def infraDelpoyJob = job("infrastructure-setup-$environment.key")
+  Templates.infraDelpoySetup(infraDelpoyJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+
   listView("$environment.key") {
       description("Jobs for the $environment.key environment")
       filterBuildQueue()
       filterExecutors()
       jobs {
-          names("aws-account-setup-$environment.key", "chef-setup-$environment.key", "deploy-$environment.key")
+          names("aws-account-setup-$environment.key", "chef-setup-$environment.key", "deploy-$environment.key", "infrastructure-setup-$environment.key")
       }
       columns {
           status()

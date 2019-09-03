@@ -1258,6 +1258,68 @@ class Templates {
       }
     }
   }
+  static void infraDelpoySetup(def job, String environment, String site, String checkoutBranch) {
+    job.with {
+      description("""
+                  This job will configure all AWS services needed for a new or updated environment/site.  The job will run one parent Cloudformation template with nested child templates.  The setup includes: \n \
+                  Account setup \n \
+                  Roles \n \
+                  Permissions \n \
+                  Cloudtrail \n \
+                  Cloud Watch \n \
+                  VPC \n \
+                  Subnets \n \
+                  Routing tables \n \
+                  Security Groups \n \
+                  Aurora MySQL \n \
+                  Aurora PostgreSQL \n \
+                  ElastiCache Memached \n \
+                  ElastiCache Redis \n \
+                  EFS \n \
+                  Load balancers \n \
+                  NAT Gateways \n \
+                  Internet Gateways \n \
+                  Route 53 DNS \n \
+                  Auto Scaling Groups (will be replaced in deploy job) \n \
+                  """)
+      keepDependencies(false)
+      disabled(false)
+      concurrentBuild(false)
+      steps {
+        downstreamParameterized {
+          trigger("infrastructure-setup") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+            }
+          }
+        }
+      }
+      publishers {
+        mailer("devops@stayntouch.com", false, true)
+      }
+      configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+          strategy {
+            'daysToKeep'('3')
+            'numToKeep'('-1')
+            'artifactDaysToKeep'('-1')
+            'artifactNumToKeep'('-1')
+          }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+          'autoRebuild'('false')
+          'rebuildDisabled'('false')
+        }
+      }
+    }
+  }
 // class close
 }
 
