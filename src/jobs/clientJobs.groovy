@@ -171,7 +171,7 @@ for (environment in environmentlist) {
   def restartFolder = folder("restart-services-$environment.key")
   Templates.restartFolderSetup(restartFolder, "$environment.key")
 
-  if(!environment.equals("prodtest"))
+  if(!environment.key.equals("prodtest"))
   {
     def restartAuthAppJob = job("restart-services-$environment.key/restart-auth-app-$environment.key")
     Templates.restartJobSetup(restartAuthAppJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'), "auth", "app")
