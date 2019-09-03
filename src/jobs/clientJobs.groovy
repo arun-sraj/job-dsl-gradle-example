@@ -100,11 +100,11 @@ for (environment in environmentlist) {
     Templates.excavatorDelpoySetup(excavatorDelpoyJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
 
   // Zest Web deploy job
-    def zestWebkDelpoyJob = job("deploy-$environment.key/zest-web-$environment.key-deploy")
+    def zestWebkDelpoyJob = job("deploy-$environment.key/rover-zest-web-$environment.key-deploy")
     Templates.zestWebkDelpoySetup(zestWebkDelpoyJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
 
   // Zest Ui deploy job
-    def zestUiDelpoyJob = job("deploy-$environment.key/zest-ui-$environment.key-deploy")
+    def zestUiDelpoyJob = job("deploy-$environment.key/rover-ui-shared-$environment.key-deploy")
     Templates.zestUiDelpoySetup(zestUiDelpoyJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
 
   // Auth rake job
