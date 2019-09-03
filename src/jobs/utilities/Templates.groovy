@@ -1327,19 +1327,15 @@ class Templates {
       description("Running rake task for auth.")
       keepDependencies(false)
       parameters {
-        stringParam("RAKE_TASK_NAME", "", """Here are some examples of values to enter:
-
-No parameters:
-lhm:cleanup
-
-Standard Parameters:
-pms:generate_folio_number_for_past_checkout_reservation_bills[HOTELA,HOTELB]
-
-Standard Parameters With Spaces (wrap with quotes):
-"pms:link_refunds_in_ar_transactions[CODE WITH SPACES]"
-
-Option Parser Parameters:
-pms:update_future_transactions -- --hotel_code="HS1234" --from_date="2017-08-01" --to_date="2017-11-13"""")
+        stringParam("RAKE_TASK_NAME", "", """Here are some examples of values to enter: \
+No parameters: \
+lhm:cleanup \
+Standard Parameters: \
+pms:generate_folio_number_for_past_checkout_reservation_bills[HOTELA,HOTELB] \
+Standard Parameters With Spaces (wrap with quotes): \
+"pms:link_refunds_in_ar_transactions[CODE WITH SPACES]" \
+Option Parser Parameters: \
+pms:update_future_transactions -- --hotel_code="HS1234" --from_date="2017-08-01" --to_date="2017-11-13""")
       }
       disabled(false)
       concurrentBuild(true)
