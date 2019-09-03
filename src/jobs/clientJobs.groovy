@@ -11,7 +11,7 @@ for (environment in environmentlist) {
 
   // Chef Folder Setup
   def chefFolder = folder("chef-setup-$environment.key")
-  Templates.chefFolderSetup(chefFolder, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+  Templates.chefFolderSetup(chefFolder, "$environment.key")
 
   // Chef Setup Agent Server
   def agentChefSetupJob = job("chef-setup-$environment.key/agent-$environment.key")
@@ -74,7 +74,7 @@ for (environment in environmentlist) {
 
   // Deployment folder
   def deployFolder = folder("deploy-$environment.key")
-  Templates.deployFolderSetup(deployFolder, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+  Templates.deployFolderSetup(deployFolder, "$environment.key")
 
   // Auth deploy job
   if(!environment.equals("prodtest"))
@@ -165,27 +165,64 @@ for (environment in environmentlist) {
     def rakeWebhookJob = job("rake-task-$environment.key/run-rake-task-webhook-$environment.key")
     Templates.rakeWebhookSetup(rakeWebhookJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
   }
+
 // Restart Job
+  // Restart Folder Setup
+  def restartFolder = folder("restart-services-$environment.key")
+  Templates.restartFolderSetup(restartFolder, "$environment.key")
+
   if(!environment.equals("prodtest"))
   {
-    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "auth", "app")
-    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "auth", "ipc")
-    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "auth", "wkr")
-    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "ifc", "app")
-    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "ifc", "ipc")
-    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "ifc", "skd")
-    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "ifc", "wkr")
-    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "pms", "app")
-    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "pms", "con")
-    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "pms", "ipc")
-    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "pms", "rsq")
-    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "pms", "wkr")
-    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "webhook", "ipc")
-    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "webhook", "wkr")
+    def restartAuthAppJob = job("restart-services-$environment.key/restart-auth-app-$environment.key")
+    Templates.restartJobSetup(restartAuthAppJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'), "auth", "app")
+
+    def restartAuthIpcJob = job("restart-services-$environment.key/restart-auth-ipc-$environment.key")
+    Templates.restartJobSetup(restartAuthIpcJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'), "auth", "ipc")
+
+    def restartAuthWkrJob = job("restart-services-$environment.key/restart-auth-wkr-$environment.key")
+    Templates.restartJobSetup(restartAuthWkrJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'), "auth", "wkr")
+
+    def restartIfcAppJob = job("restart-services-$environment.key/restart-ifc-app-$environment.key")
+    Templates.restartJobSetup(restartIfcAppJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'), "ifc", "app")
+
+    def restartIfcIpcJob = job("restart-services-$environment.key/restart-ifc-ipc-$environment.key")
+    Templates.restartJobSetup(restartIfcIpcJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'), "ifc", "ipc")
+
+    def restartIfcSkdJob = job("restart-services-$environment.key/restart-ifc-skd-$environment.key")
+    Templates.restartJobSetup(restartIfcSkdJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'), "ifc", "skd")
+
+    def restartIfcWkrJob = job("restart-services-$environment.key/restart-ifc-wkr-$environment.key")
+    Templates.restartJobSetup(restartIfcWkrJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'), "ifc", "wkr")
+
+    def restartPmsAppJob = job("restart-services-$environment.key/restart-pms-app-$environment.key")
+    Templates.restartJobSetup(restartPmsAppJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'), "pms", "app")
+
+    def restartPmsConJob = job("restart-services-$environment.key/restart-pms-con-$environment.key")
+    Templates.restartJobSetup(restartPmsConJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'), "pms", "con")
+
+    def restartPmsIpcJob = job("restart-services-$environment.key/restart-pms-ipc-$environment.key")
+    Templates.restartJobSetup(restartPmsIpcJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'), "pms", "ipc")
+
+    def restartPmsRsqJob = job("restart-services-$environment.key/restart-pms-rsq-$environment.key")
+    Templates.restartJobSetup(restartPmsRsqJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'), "pms", "rsq")
+
+    def restartPmsWkrJob = job("restart-services-$environment.key/restart-pms-wkr-$environment.key")
+    Templates.restartJobSetup(restartPmsWkrJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'), "pms", "wkr")
+
+    def restartWebhookIpcJob = job("restart-services-$environment.key/restart-webhook-ipc-$environment.key")
+    Templates.restartJobSetup(restartWebhookIpcJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'), "webhook", "ipc")
+
+    def restartWebhookWkrJob = job("restart-services-$environment.key/restart-webhook-wkr-$environment.key")
+    Templates.restartJobSetup(restartWebhookWkrJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'), "webhook", "wkr")
   }
   else {
-    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "pms", "app")
-    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "pms", "rsq")
+
+    def restartPmsAppJob = job("restart-services-$environment.key/restart-pms-app-$environment.key")
+    Templates.restartJobSetup(restartPmsAppJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'), "pms", "app")
+
+    def restartPmsRsqJob = job("restart-services-$environment.key/restart-pms-rsq-$environment.key")
+    Templates.restartJobSetup(restartPmsRsqJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'), "pms", "rsq")
+
   }
   listView("$environment.key") {
       description("Jobs for the $environment.key environment")

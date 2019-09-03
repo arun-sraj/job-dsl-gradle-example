@@ -45,7 +45,7 @@ class Templates {
   }
 
     //chef setup
-  static void chefFolderSetup(def folder, String environment, String site, String branch) {
+  static void chefFolderSetup(def folder, String environment) {
     folder.with {
       description "This job will replace all template instances with the latest Chef configuration.  We will need one job per env & application type.  The steps it will follow for each template type are: \
       Start new template instance \
@@ -567,7 +567,7 @@ class Templates {
 // Deploy jobs
 
 // Deploy Folder
-  static void deployFolderSetup(def folder, String environment, String site, String branch) {
+  static void deployFolderSetup(def folder, String environment) {
     folder.with {
       description "This job will deploy the template image to the auto scaling group for each template type.  We will need one job per env & application type.  The steps for each template type are: \
       Create template instance from chef template image \
@@ -1574,8 +1574,88 @@ Option Parser Parameters:
       }
     }
   }
-  static void restartJobSetup(String environment, String site, String checkoutBranch, String app, String type) {
-    job("restart-$app-$environment") {
+
+// Restart job setup
+
+  // Deploy Folder
+  static void restartFolderSetup(def folder, String environment) {
+    folder.with {
+      description "jobs to restart all services"
+      views {
+        listView("auth") {
+            description("All auth restart jobs")
+            filterBuildQueue()
+            filterExecutors()
+            jobs {
+                name("restart-auth-.+-$environment")
+            }
+            columns {
+                status()
+                weather()
+                name()
+                lastSuccess()
+                lastFailure()
+                lastDuration()
+                buildButton()
+            }
+        }
+        listView("ifc") {
+            description("ifc restart jobs")
+            filterBuildQueue()
+            filterExecutors()
+            jobs {
+                name("restart-ifc-.+-$environment")
+            }
+            columns {
+                status()
+                weather()
+                name()
+                lastSuccess()
+                lastFailure()
+                lastDuration()
+                buildButton()
+            }
+        }
+        listView("pms") {
+            description("pms restart jobs")
+            filterBuildQueue()
+            filterExecutors()
+            jobs {
+                names("restart-pms-.+-$environment")
+            }
+            columns {
+                status()
+                weather()
+                name()
+                lastSuccess()
+                lastFailure()
+                lastDuration()
+                buildButton()
+            }
+        }
+        listView("webhook") {
+            description("webhook restart jobs")
+            filterBuildQueue()
+            filterExecutors()
+            jobs {
+                names("restart-webhook-.+-$environment")
+            }
+            columns {
+                status()
+                weather()
+                name()
+                lastSuccess()
+                lastFailure()
+                lastDuration()
+                buildButton()
+            }
+        }
+      }
+    }
+  }
+
+  static void restartJobSetup( def job, String environment, String site, String checkoutBranch, String app, String type) {
+    job.with {
       description()
       keepDependencies(false)
       blockOn(".*$app-$environment-deploy.*", {
