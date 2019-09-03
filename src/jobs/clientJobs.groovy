@@ -137,16 +137,33 @@ for (environment in environmentlist) {
     description "This folder includes the jobs for running the rake tasks in all applications for the environment $environment.key."
   }
 
+  // Auth rake job
+
   if(!environment.equals("prodtest"))
   {
     def rakeAuthJob = job("rake-task-$environment.key/run-rake-task-auth-$environment.key")
     Templates.rakeAuthSetup(rakeAuthJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
   }
 
+  // Ifc rake job
+
   if(!environment.equals("prodtest"))
   {
     def rakeIfcJob = job("rake-task-$environment.key/run-rake-task-ifc-$environment.key")
     Templates.rakeIfcSetup(rakeIfcJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+  }
+
+  // Pms rake job
+
+  def rakePmsJob = job("rake-task-$environment.key/run-rake-task-pms-$environment.key")
+  Templates.rakePmsSetup(rakePmsJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+
+  // Webhook rake job
+
+  if(!environment.equals("prodtest"))
+  {
+    def rakeWebhookJob = job("rake-task-$environment.key/run-rake-task-webhook-$environment.key")
+    Templates.rakeWebhookSetup(rakeWebhookJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
   }
 
   listView("$environment.key") {

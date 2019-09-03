@@ -1358,6 +1358,14 @@ pms:update_future_transactions -- --hotel_code="HS1234" --from_date="2017-08-01"
       }
       publishers {
         mailer("devops@stayntouch.com release@stayntouch.com", false, true)
+        downstreamParameterized {
+          trigger("../rake-task/cleanup/clean-up-rake-task-on-failure") {
+            condition('UNSTABLE_OR_BETTER')
+            parameters {
+              currentBuild()
+            }
+          }
+        }
       }
       configure {
         it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
@@ -1404,21 +1412,152 @@ pms:update_future_transactions -- --hotel_code="HS1234" --from_date="2017-08-01"
               predefinedProp("BRANCH", "$checkoutBranch")
               predefinedProp("ENVIRONMENT", "$environment")
               predefinedProp("SITE", "$site")
-              predefinedProp("APP_TYPE", "ifc-")
+              predefinedProp("APP_TYPE", "ifc")
             }
           }
         }
       }
       publishers {
-        mailer("devops@stayntouch.com release@stayntouch.com", false, true)
         downstreamParameterized {
-            trigger("../rake-task/cleanup/clean-up-rake-task-on-failure") {
-                condition('UNSTABLE_OR_BETTER')
-                parameters {
-                    currentBuild()
-                }
+          trigger("../rake-task/cleanup/clean-up-rake-task-on-failure") {
+            condition('UNSTABLE_OR_BETTER')
+            parameters {
+              currentBuild()
             }
-        }      }
+          }
+        }
+        mailer("devops@stayntouch.com release@stayntouch.com", false, true)
+      }
+      configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+          strategy {
+            'daysToKeep'('3')
+            'numToKeep'('-1')
+            'artifactDaysToKeep'('-1')
+            'artifactNumToKeep'('-1')
+          }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+          'autoRebuild'('false')
+          'rebuildDisabled'('false')
+        }
+      }
+    }
+  }
+  static void rakePmsSetup(def job, String environment, String site, String checkoutBranch) {
+    job.with {
+      description("Running rake task for pms.")
+      keepDependencies(false)
+      parameters {
+        stringParam("RAKE_TASK_NAME", "", """Here are some examples of values to enter:
+
+No parameters:
+lhm:cleanup
+
+Standard Parameters:
+pms:generate_folio_number_for_past_checkout_reservation_bills[HOTELA,HOTELB]
+
+Standard Parameters With Spaces (wrap with quotes):
+"pms:link_refunds_in_ar_transactions[CODE WITH SPACES]"
+
+Option Parser Parameters:
+pms:update_future_transactions -- --hotel_code="HS1234" --from_date="2017-08-01" --to_date="2017-11-13""")
+      }
+      disabled(false)
+      concurrentBuild(true)
+      steps {
+        downstreamParameterized {
+          trigger("../rake-task/pms/pms-rake-task") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+              predefinedProp("APP_TYPE", "pms")
+            }
+          }
+        }
+      }
+      publishers {
+        downstreamParameterized {
+          trigger("../rake-task/cleanup/clean-up-rake-task-on-failure") {
+            condition('UNSTABLE_OR_BETTER')
+            parameters {
+              currentBuild()
+            }
+          }
+        }
+        mailer("devops@stayntouch.com release@stayntouch.com", false, true)
+      }
+      configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+          strategy {
+            'daysToKeep'('3')
+            'numToKeep'('-1')
+            'artifactDaysToKeep'('-1')
+            'artifactNumToKeep'('-1')
+          }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+          'autoRebuild'('false')
+          'rebuildDisabled'('false')
+        }
+      }
+    }
+  }
+  static void rakeWebhookSetup(def job, String environment, String site, String checkoutBranch) {
+    job.with {
+      description("Running rake task for webhook.")
+      keepDependencies(false)
+      parameters {
+        stringParam("RAKE_TASK_NAME", "", """Here are some examples of values to enter:
+
+No parameters:
+lhm:cleanup
+
+Standard Parameters:
+pms:generate_folio_number_for_past_checkout_reservation_bills[HOTELA,HOTELB]
+
+Standard Parameters With Spaces (wrap with quotes):
+"pms:link_refunds_in_ar_transactions[CODE WITH SPACES]"
+
+Option Parser Parameters:
+    pms:update_future_transactions -- --hotel_code="HS1234" --from_date="2017-08-01" --to_date="2017-11-13"""")
+      }
+      disabled(false)
+      concurrentBuild(true)
+      steps {
+        downstreamParameterized {
+          trigger("../rake-task/webhook/webhook-rake-task") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+              predefinedProp("APP_TYPE", "webhook")
+            }
+          }
+        }
+      }
+      publishers {
+        downstreamParameterized {
+          trigger("../rake-task/cleanup/clean-up-rake-task-on-failure") {
+            condition('UNSTABLE_OR_BETTER')
+            parameters {
+              currentBuild()
+            }
+          }
+        }
+        mailer("devops@stayntouch.com release@stayntouch.com", false, true)
+      }
       configure {
         it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
           strategy {
