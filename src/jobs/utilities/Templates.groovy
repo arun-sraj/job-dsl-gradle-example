@@ -1574,6 +1574,52 @@ Option Parser Parameters:
       }
     }
   }
+  static void restartJobSetup(String environment, String site, String checkoutBranch, String app, String type) {
+    job("restart-$app-$environment") {
+      description()
+      keepDependencies(false)
+      blockOn(".*$app-$environment-deploy.*", {
+        blockLevel("GLOBAL")
+        scanQueueFor("DISABLED")
+      })
+      disabled(false)
+      concurrentBuild(false)
+      steps {
+        downstreamParameterized {
+          trigger("../restart-services/restart-$app-$type") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+            }
+          }
+        }
+      }
+      publishers {
+        mailer("devops@stayntouch.com", false, true)
+      }
+      configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+          strategy {
+            'daysToKeep'('3')
+            'numToKeep'('-1')
+            'artifactDaysToKeep'('-1')
+            'artifactNumToKeep'('-1')
+          }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+          'autoRebuild'('false')
+          'rebuildDisabled'('false')
+        }
+      }
+    }
+  }
+
 // class close
 }
 

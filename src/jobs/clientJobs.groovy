@@ -165,7 +165,28 @@ for (environment in environmentlist) {
     def rakeWebhookJob = job("rake-task-$environment.key/run-rake-task-webhook-$environment.key")
     Templates.rakeWebhookSetup(rakeWebhookJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
   }
-
+// Restart Job
+  if(!environment.equals("prodtest"))
+  {
+    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "auth", "app")
+    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "auth", "ipc")
+    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "auth", "wkr")
+    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "ifc", "app")
+    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "ifc", "ipc")
+    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "ifc", "skd")
+    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "ifc", "wkr")
+    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "pms", "app")
+    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "pms", "con")
+    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "pms", "ipc")
+    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "pms", "rsq")
+    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "pms", "wkr")
+    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "webhook", "ipc")
+    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "webhook", "wkr")
+  }
+  else {
+    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "pms", "app")
+    Templates.restartJobSetup("$environment.key", environment.value.get('site'), environment.value.get('branch'), "pms", "rsq")
+  }
   listView("$environment.key") {
       description("Jobs for the $environment.key environment")
       filterBuildQueue()
