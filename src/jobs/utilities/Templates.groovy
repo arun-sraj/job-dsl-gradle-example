@@ -1526,7 +1526,7 @@ Standard Parameters With Spaces (wrap with quotes):
 "pms:link_refunds_in_ar_transactions[CODE WITH SPACES]"
 
 Option Parser Parameters:
-    pms:update_future_transactions -- --hotel_code="HS1234" --from_date="2017-08-01" --to_date="2017-11-13"""")
+    pms:update_future_transactions -- --hotel_code="HS1234" --from_date="2017-08-01" --to_date="2017-11-13""")
       }
       disabled(false)
       concurrentBuild(true)
