@@ -17,27 +17,6 @@ for (environment in environmentlist) {
   def agentChefSetupJob = job("chef-setup-$environment.key/agent-$environment.key")
   Templates.agentChefSetup(agentChefSetupJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
 
-  // Chef Setup auth Server
-  if(!environment.equals("prodtest"))
-  {
-    def authChefSetupJob = job("chef-setup-$environment.key/auth-$environment.key")
-    Templates.authChefSetup(authChefSetupJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
-  }
-
-  // Chef Setup glusterfs Server
-  if(!environment.equals("prodtest"))
-  {
-    def glusterfsChefSetupJob = job("chef-setup-$environment.key/glusterfs-$environment.key")
-    Templates.glusterfsChefSetup(glusterfsChefSetupJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
-  }
-
-  // Chef Setup ifc Server
-  if(!environment.equals("prodtest"))
-  {
-    def ifcChefSetupJob = job("chef-setup-$environment.key/ifc-$environment.key")
-    Templates.ifcChefSetup(ifcChefSetupJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
-  }
-
   // Chef Setup mq Server
   def mqChefSetupJob = job("chef-setup-$environment.key/mq-$environment.key")
   Templates.mqChefSetup(mqChefSetupJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
@@ -50,86 +29,13 @@ for (environment in environmentlist) {
   def pmsChefSetupJob = job("chef-setup-$environment.key/pms-$environment.key")
   Templates.pmsChefSetup(pmsChefSetupJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
 
-  // Chef Setup postfix Server
-  if(!environment.equals("prodtest"))
-  {
-    def postfixChefSetupJob = job("chef-setup-$environment.key/postfix-$environment.key")
-    Templates.postfixChefSetup(postfixChefSetupJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
-  }
-
-  // Chef Setup webhook Server
-  if(!environment.equals("prodtest"))
-  {
-    def webhookChefSetupJob = job("chef-setup-$environment.key/webhook-$environment.key")
-    Templates.webhookChefSetup(webhookChefSetupJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
-  }
-  // Chef Setup excavator-copy service
-  if(!environment.equals("prodtest"))
-  {
-    def excavatorCopyJob = job("chef-setup-$environment.key/excavator-copy-$environment.key")
-    Templates.excavatorCopy(excavatorCopyJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
-  }
-
-// Deployment
-
   // Deployment folder
   def deployFolder = folder("deploy-$environment.key")
   Templates.deployFolderSetup(deployFolder, "$environment.key")
 
-  // Auth deploy job
-  if(!environment.equals("prodtest"))
-  {
-    def authDeployJob = job("deploy-$environment.key/auth-$environment.key-deploy")
-    Templates.authDelpoySetup(authDeployJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
-  }
-
-  // Pms deploy job
-  if(!environment.equals("prodtest"))
-  {
-    def pmsDeployJob = job("deploy-$environment.key/pms-$environment.key-deploy")
-    Templates.pmsDelpoySetup(pmsDeployJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
-  }
-
-  // Ifc deploy job
-  if(!environment.equals("prodtest"))
-  {
-    def ifcDeployJob = job("deploy-$environment.key/ifc-$environment.key-deploy")
-    Templates.ifcDelpoySetup(ifcDeployJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
-  }
-
-  // Webhook deploy job
-  if(!environment.equals("prodtest"))
-  {
-    def webhookDeployJob = job("deploy-$environment.key/webhook-$environment.key-deploy")
-    Templates.webhookDelpoySetup(webhookDeployJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
-  }
-
-  // excavator deploy job
-  if(!environment.equals("prodtest"))
-  {
-    def excavatorDelpoyJob = job("deploy-$environment.key/excavator-$environment.key-deploy")
-    Templates.excavatorDelpoySetup(excavatorDelpoyJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
-  }
-
-  // Zest Web deploy job
-  if(!environment.equals("prodtest"))
-  {
-    def zestWebkDelpoyJob = job("deploy-$environment.key/zest-web-$environment.key-deploy")
-    Templates.zestWebkDelpoySetup(zestWebkDelpoyJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
-  }
-
-  // Zest Ui deploy job
-  if(!environment.equals("prodtest"))
-  {
-    def zestUiDelpoyJob = job("deploy-$environment.key/zest-ui-$environment.key-deploy")
-    Templates.zestUiDelpoySetup(zestUiDelpoyJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
-  }
-
   // Infra deploy job
   def infraDelpoyJob = job("infrastructure-setup-$environment.key")
   Templates.infraDelpoySetup(infraDelpoyJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
-
-  // Rake setup
 
   // Rake Folder Setup
   folder("rake-task-$environment.key")
@@ -137,39 +43,85 @@ for (environment in environmentlist) {
     description "This folder includes the jobs for running the rake tasks in all applications for the environment $environment.key."
   }
 
-  // Auth rake job
-
-  if(!environment.equals("prodtest"))
-  {
-    def rakeAuthJob = job("rake-task-$environment.key/run-rake-task-auth-$environment.key")
-    Templates.rakeAuthSetup(rakeAuthJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
-  }
-
-  // Ifc rake job
-
-  if(!environment.equals("prodtest"))
-  {
-    def rakeIfcJob = job("rake-task-$environment.key/run-rake-task-ifc-$environment.key")
-    Templates.rakeIfcSetup(rakeIfcJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
-  }
-
   // Pms rake job
 
   def rakePmsJob = job("rake-task-$environment.key/run-rake-task-pms-$environment.key")
   Templates.rakePmsSetup(rakePmsJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
 
-  // Webhook rake job
-
-  if(!environment.equals("prodtest"))
-  {
-    def rakeWebhookJob = job("rake-task-$environment.key/run-rake-task-webhook-$environment.key")
-    Templates.rakeWebhookSetup(rakeWebhookJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
-  }
-
-// Restart Job
   // Restart Folder Setup
   def restartFolder = folder("restart-services-$environment.key")
   Templates.restartFolderSetup(restartFolder, "$environment.key")
+
+  // Chef Setup auth Server
+  if(!environment.key.equals("prodtest"))
+  {
+    def authChefSetupJob = job("chef-setup-$environment.key/auth-$environment.key")
+    Templates.authChefSetup(authChefSetupJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+
+  // Chef Setup glusterfs Server
+
+    def glusterfsChefSetupJob = job("chef-setup-$environment.key/glusterfs-$environment.key")
+    Templates.glusterfsChefSetup(glusterfsChefSetupJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+
+  // Chef Setup ifc Server
+    def ifcChefSetupJob = job("chef-setup-$environment.key/ifc-$environment.key")
+    Templates.ifcChefSetup(ifcChefSetupJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+
+  // Chef Setup postfix Server
+    def postfixChefSetupJob = job("chef-setup-$environment.key/postfix-$environment.key")
+    Templates.postfixChefSetup(postfixChefSetupJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+
+  // Chef Setup webhook Server
+    def webhookChefSetupJob = job("chef-setup-$environment.key/webhook-$environment.key")
+    Templates.webhookChefSetup(webhookChefSetupJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+
+  // Chef Setup excavator-copy service
+    def excavatorCopyJob = job("chef-setup-$environment.key/excavator-copy-$environment.key")
+    Templates.excavatorCopy(excavatorCopyJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+
+  // Auth deploy job
+    def authDeployJob = job("deploy-$environment.key/auth-$environment.key-deploy")
+    Templates.authDelpoySetup(authDeployJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+
+  // Pms deploy job
+    def pmsDeployJob = job("deploy-$environment.key/pms-$environment.key-deploy")
+    Templates.pmsDelpoySetup(pmsDeployJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+
+  // Ifc deploy job
+    def ifcDeployJob = job("deploy-$environment.key/ifc-$environment.key-deploy")
+    Templates.ifcDelpoySetup(ifcDeployJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+
+  // Webhook deploy job
+    def webhookDeployJob = job("deploy-$environment.key/webhook-$environment.key-deploy")
+    Templates.webhookDelpoySetup(webhookDeployJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+
+  // excavator deploy job
+    def excavatorDelpoyJob = job("deploy-$environment.key/excavator-$environment.key-deploy")
+    Templates.excavatorDelpoySetup(excavatorDelpoyJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+
+  // Zest Web deploy job
+    def zestWebkDelpoyJob = job("deploy-$environment.key/zest-web-$environment.key-deploy")
+    Templates.zestWebkDelpoySetup(zestWebkDelpoyJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+
+  // Zest Ui deploy job
+    def zestUiDelpoyJob = job("deploy-$environment.key/zest-ui-$environment.key-deploy")
+    Templates.zestUiDelpoySetup(zestUiDelpoyJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+
+  // Auth rake job
+
+    def rakeAuthJob = job("rake-task-$environment.key/run-rake-task-auth-$environment.key")
+    Templates.rakeAuthSetup(rakeAuthJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+
+  // Ifc rake job
+
+    def rakeIfcJob = job("rake-task-$environment.key/run-rake-task-ifc-$environment.key")
+    Templates.rakeIfcSetup(rakeIfcJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+
+  // Webhook rake job
+
+    def rakeWebhookJob = job("rake-task-$environment.key/run-rake-task-webhook-$environment.key")
+    Templates.rakeWebhookSetup(rakeWebhookJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+}
 
   if(!environment.key.equals("prodtest"))
   {
@@ -224,6 +176,8 @@ for (environment in environmentlist) {
     Templates.restartJobSetup(restartPmsRsqJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'), "pms", "rsq")
 
   }
+
+// Main list view
   listView("$environment.key") {
       description("Jobs for the $environment.key environment")
       filterBuildQueue()
