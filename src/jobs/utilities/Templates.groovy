@@ -1583,72 +1583,72 @@ Option Parser Parameters:
       description "jobs to restart all services"
       views {
         listView("auth") {
-            description("All auth restart jobs")
-            filterBuildQueue()
-            filterExecutors()
-            jobs {
-                name("restart-auth-.+-$environment")
-            }
-            columns {
-                status()
-                weather()
-                name()
-                lastSuccess()
-                lastFailure()
-                lastDuration()
-                buildButton()
-            }
+          description("All auth restart jobs")
+          filterBuildQueue()
+          filterExecutors()
+          jobs {
+            regex("restart-auth-.+-$environment")
+          }
+          columns {
+            status()
+            weather()
+            name()
+            lastSuccess()
+            lastFailure()
+            lastDuration()
+            buildButton()
+          }
         }
         listView("ifc") {
-            description("ifc restart jobs")
-            filterBuildQueue()
-            filterExecutors()
-            jobs {
-                name("restart-ifc-.+-$environment")
-            }
-            columns {
-                status()
-                weather()
-                name()
-                lastSuccess()
-                lastFailure()
-                lastDuration()
-                buildButton()
-            }
+          description("ifc restart jobs")
+          filterBuildQueue()
+          filterExecutors()
+          jobs {
+            regex("restart-ifc-.+-$environment")
+          }
+          columns {
+            status()
+            weather()
+            name()
+            lastSuccess()
+            lastFailure()
+            lastDuration()
+            buildButton()
+          }
         }
         listView("pms") {
-            description("pms restart jobs")
-            filterBuildQueue()
-            filterExecutors()
-            jobs {
-                names("restart-pms-.+-$environment")
-            }
-            columns {
-                status()
-                weather()
-                name()
-                lastSuccess()
-                lastFailure()
-                lastDuration()
-                buildButton()
-            }
+          description("pms restart jobs")
+          filterBuildQueue()
+          filterExecutors()
+          jobs {
+            regex("restart-pms-.+-$environment")
+          }
+          columns {
+            status()
+            weather()
+            name()
+            lastSuccess()
+            lastFailure()
+            lastDuration()
+            buildButton()
+          }
         }
         listView("webhook") {
-            description("webhook restart jobs")
-            filterBuildQueue()
-            filterExecutors()
-            jobs {
-                names("restart-webhook-.+-$environment")
-            }
-            columns {
-                status()
-                weather()
-                name()
-                lastSuccess()
-                lastFailure()
-                lastDuration()
-                buildButton()
-            }
+          description("webhook restart jobs")
+          filterBuildQueue()
+          filterExecutors()
+          jobs {
+            regex("restart-webhook-.+-$environment")
+          }
+          columns {
+            status()
+            weather()
+            name()
+            lastSuccess()
+            lastFailure()
+            lastDuration()
+            buildButton()
+          }
         }
       }
     }
