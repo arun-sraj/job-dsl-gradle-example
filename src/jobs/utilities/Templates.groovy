@@ -1408,25 +1408,17 @@ pms:update_future_transactions -- --hotel_code="HS1234" --from_date="2017-08-01"
             }
           }
         }
-        downstreamParameterized {
-          trigger("../rake-task/ifc/ifc-rake-task") {
-            block {
-              buildStepFailure("SUCCESS")
-              unstable("SUCCESS")
-              failure("SUCCESS")
-            }
-            parameters {
-              predefinedProp("BRANCH", "$checkoutBranch")
-              predefinedProp("ENVIRONMENT", "$environment")
-              predefinedProp("SITE", "$site")
-              predefinedProp("APP_TYPE", "ifc-")
-            }
-          }
-        }
       }
       publishers {
         mailer("devops@stayntouch.com release@stayntouch.com", false, true)
-      }
+        downstreamParameterized {
+            trigger("../rake-task/cleanup/clean-up-rake-task-on-failure") {
+                condition('UNSTABLE_OR_BETTER')
+                parameters {
+                    currentBuild()
+                }
+            }
+        }      }
       configure {
         it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
           strategy {
