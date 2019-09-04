@@ -1740,7 +1740,283 @@ Option Parser Parameters:
       }
     }
   }
+  static void databaseCopyScheduler( def job, String environment, String site, String checkoutBranch) {
+    job.with {
+      description("""This job will configure a database copy schedule between two accounts
 
+
+
+It will accept appropriate parameters like the source and destination account numbers/roles
+
+It configures the job to execute daily at 06:00 pm EST
+
+It will keep the last 2 snapshots
+
+It will load the source and destination CloudFormation templates into the respective accounts""")
+      keepDependencies(false)
+      disabled(true)
+      concurrentBuild(false)
+      steps {
+        downstreamParameterized {
+          trigger("../utilities/database-copy-scheduler-from-one-to-another-account") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+             parameters {
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+            }
+          }
+        }
+      }
+      publishers {
+        mailer("devops@stayntouch.com", false, true)
+      }
+      configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+          strategy {
+            'daysToKeep'('3')
+            'numToKeep'('-1')
+            'artifactDaysToKeep'('-1')
+            'artifactNumToKeep'('-1')
+          }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+          'autoRebuild'('false')
+          'rebuildDisabled'('false')
+        }
+      }
+    }
+  }
+  static void databaseDisasterRecovery( def job, String environment, String site, String checkoutBranch) {
+    job.with {
+      description("""This job will configure a database copy schedule between two regions of same account
+
+It will keep the last 7 days snapshots""")
+      keepDependencies(false)
+      disabled(false)
+      concurrentBuild(false)
+      steps {
+        downstreamParameterized {
+          trigger("../utilities/database-disaster-recovery") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+            }
+          }
+        }
+      }
+      publishers {
+        mailer("devops@stayntouch.com", false, true)
+      }
+      configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+          strategy {
+            'daysToKeep'('3')
+            'numToKeep'('-1')
+            'artifactDaysToKeep'('-1')
+            'artifactNumToKeep'('-1')
+          }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+          'autoRebuild'('false')
+          'rebuildDisabled'('false')
+        }
+      }
+    }
+  }
+  static void excavatorCopy( def job, String environment, String site, String checkoutBranch) {
+    job.with {
+      description("Deploy Chef cookbooks for staging environment using")
+      keepDependencies(false)
+      disabled(false)
+      concurrentBuild(false)
+      steps {
+        downstreamParameterized {
+          trigger("../utilities/excavator-copy") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+              predefinedProp("CAP_ENVIRONMENT", "$environment")
+            }
+          }
+        }
+      }
+      publishers {
+        mailer("devops@stayntouch.com", false, true)
+      }
+      configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+          strategy {
+            'daysToKeep'('3')
+            'numToKeep'('-1')
+            'artifactDaysToKeep'('-1')
+            'artifactNumToKeep'('-1')
+          }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+          'autoRebuild'('false')
+          'rebuildDisabled'('false')
+        }
+      }
+    }
+  }
+  static void exportMysql( def job, String environment, String site, String checkoutBranch) {
+    job.with {
+      description("Export mysql database to a compressed file")
+      keepDependencies(false)
+      parameters {
+        choiceParam("DATABASE", ["pms", "auth"], "")
+      }
+      disabled(false)
+      concurrentBuild(false)
+      steps {
+        shell("rm -f *.sql.gz")
+        downstreamParameterized {
+          trigger("../utilities/export-mysql") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+            }
+          }
+        }
+      }
+      publishers {
+        archiveArtifacts {
+          pattern("*.sql.gz")
+          allowEmpty(false)
+          onlyIfSuccessful(false)
+          fingerprint(false)
+          defaultExcludes(true)
+        }
+        mailer("devops@stayntouch.com", false, true)
+      }
+      configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+          strategy {
+            'daysToKeep'('3')
+            'numToKeep'('-1')
+            'artifactDaysToKeep'('-1')
+            'artifactNumToKeep'('-1')
+          }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+          'autoRebuild'('false')
+          'rebuildDisabled'('false')
+        }
+      }
+    }
+  }
+  static void postDbCopy( def job, String environment, String site, String checkoutBranch) {
+    job.with {
+      description("""This job has been scheduled for daily 12:00 AM EST and will do below things:
+
+1. Deploy latest develop into prod-test
+
+2. Sanitize sensitive data
+
+3. Update users with a default password
+
+4. Clear Memcached.
+""")
+      keepDependencies(false)
+      disabled(false)
+      concurrentBuild(false)
+      steps {
+        downstreamParameterized {
+          trigger("../deploy-prodtest/pms-prodtest-deploy") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+          }
+        }
+        downstreamParameterized {
+          trigger("../rake-task-prod-test/run-rake-task-pms-prod-test") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+              predefinedProp("RAKE_TASK_NAME", "utilities:sanitize_sensitive_data")
+            }
+          }
+        }
+        downstreamParameterized {
+          trigger("../rake-task-prod-test/run-rake-task-pms-prod-test") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+              predefinedProp("RAKE_TASK_NAME", "utilities:update_all_users_password['mE9P14d6u43x41R']")
+            }
+          }
+        }
+        downstreamParameterized {
+          trigger("../rake-task-prod-test/run-rake-task-pms-prod-test") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+              predefinedProp("RAKE_TASK_NAME", "memcached:flush")
+            }
+          }
+        }
+      }
+      publishers {
+        downstreamParameterized {
+          trigger("../rake-task-prod-test/run-rake-task-pms-prod-test") {
+            condition('UNSTABLE_OR_BETTER')
+            parameters {
+              predefinedProp("RAKE_TASK_NAME", "memcached:flush")
+            }
+          }
+        }
+        mailer("devops@stayntouch.com", false, true)
+      }
+      configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+          strategy {
+            'daysToKeep'('3')
+            'numToKeep'('-1')
+            'artifactDaysToKeep'('-1')
+            'artifactNumToKeep'('-1')
+          }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+          'autoRebuild'('false')
+          'rebuildDisabled'('false')
+        }
+      }
+    }
+  }
 // class close
 }
 

@@ -57,6 +57,13 @@ for (environment in environmentlist) {
   def secretManagerJob = job("secrets-manager-setup-$environment.key")
   Templates.secretManagerSetup(secretManagerJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
 
+  // Utilities folder
+
+  folder("utilities-$environment.key")
+  {
+    description "All the utility builds for the staging environment."
+  }
+
   // Chef Setup auth Server
   if(!environment.key.equals("prodtest"))
   {
@@ -180,6 +187,33 @@ for (environment in environmentlist) {
     Templates.restartJobSetup(restartPmsRsqJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'), "pms", "rsq")
 
   }
+// Utilities
+  if(environment.key.equals("awsstage") || environment.key.equals("prod"))
+  {
+    def databaseCopySchedulerJob = job("utilities-$environment.key/database-copy-scheduler-from-$environment.key-to-prod-test")
+    Templates.databaseCopyScheduler(databaseCopySchedulerJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+  }
+  if(environment.key.equals("awsstage") || environment.key.equals("prod") || environment.key.equals("prodeu"))
+  {
+    def databaseDisasterRecoveryJob = job("utilities-$environment.key/database-disaster-recovery-$environment.key")
+    Templates.databaseDisasterRecovery(databaseDisasterRecoveryJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+  }
+  if(environment.key.equals("awsstage") || environment.key.equals("prod") || environment.key.equals("prodeu") || environment.key.equals("prodtest"))
+  {
+    def excavatorCopyJob = job("utilities-$environment.key/excavator-copy-$environment.key")
+    Templates.excavatorCopy(excavatorCopyJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+  }
+  if(environment.key.equals("awsstage") || environment.key.equals("release"))
+  {
+    def exportMysqlJob = job("utilities-$environment.key/export-mysql-$environment.key")
+    Templates.exportMysql(exportMysqlJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+  }
+  if(environment.key.equals("prodtest"))
+  {
+    def postDbCopyJob = job("utilities-$environment.key/post-db-copy-tasks-prod-test")
+    Templates.postDbCopy(postDbCopyJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+  }
+
 
 // Main list view
   listView("$environment.key") {
@@ -187,7 +221,7 @@ for (environment in environmentlist) {
       filterBuildQueue()
       filterExecutors()
       jobs {
-          names("aws-account-setup-$environment.key", "chef-setup-$environment.key", "deploy-$environment.key", "infrastructure-setup-$environment.key", "rake-task-$environment.key", "restart-services-$environment.key", "secrets-manager-setup-$environment.key")
+          names("aws-account-setup-$environment.key", "chef-setup-$environment.key", "deploy-$environment.key", "infrastructure-setup-$environment.key", "rake-task-$environment.key", "restart-services-$environment.key", "secrets-manager-setup-$environment.key", "utilities-$environment.key")
       }
       columns {
           status()
