@@ -197,6 +197,16 @@ for (environment in environmentlist) {
   {
     def databaseDisasterRecoveryJob = job("utilities-$environment.key/database-disaster-recovery-$environment.key")
     Templates.databaseDisasterRecovery(databaseDisasterRecoveryJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+
+    // Customer VPN setup
+
+    folder("custvpn-$environment.key")
+    {
+      description "Jobs to setup custvpn service."
+    }
+    def custvpnEnvSetupJob = job("custvpn-$environment.key/custvpn-server-setup-$environment.key")
+    Templates.custvpnEnvSetup(custvpnEnvSetupJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+
   }
   if(environment.key.equals("awsstage") || environment.key.equals("prod") || environment.key.equals("prodeu") || environment.key.equals("prodtest"))
   {

@@ -2017,6 +2017,48 @@ It will keep the last 7 days snapshots""")
       }
     }
   }
+// Customer VPN setup
+  static void custvpnEnvSetup( def job, String environment, String site, String checkoutBranch) {
+    job.with {
+      description("Job for deploying Customer VPN service for the $environment environment.")
+      keepDependencies(false)
+      disabled(false)
+      concurrentBuild(false)
+      steps {
+        downstreamParameterized {
+          trigger("../custvpn/custvpn-server-setup") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+            }
+          }
+        }
+      }
+      publishers {
+        mailer("devops@stayntouch.com", false, false)
+      }
+      configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+          strategy {
+            'daysToKeep'('3')
+            'numToKeep'('-1')
+            'artifactDaysToKeep'('-1')
+            'artifactNumToKeep'('-1')
+          }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+          'autoRebuild'('false')
+          'rebuildDisabled'('false')
+        }
+      }
+      }
+    }
 // class close
 }
 
