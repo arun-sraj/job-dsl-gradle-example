@@ -1,6 +1,6 @@
-# Jenkins Job DSL Gradle Example 
+# Jenkins Job DSL Gradle Example
 
-An example [Job DSL](https://github.com/jenkinsci/job-dsl-plugin) project that uses Gradle for building and testing. Check out [this presentation](https://www.youtube.com/watch?v=SSK_JaBacE0) for a walkthrough of this example (starts around 14:00). 
+An example [Job DSL](https://github.com/jenkinsci/job-dsl-plugin) project that uses Gradle for building and testing. Check out [this presentation](https://www.youtube.com/watch?v=SSK_JaBacE0) for a walkthrough of this example (starts around 14:00).
 
 ## File structure
 
@@ -15,28 +15,6 @@ An example [Job DSL](https://github.com/jenkinsci/job-dsl-plugin) project that u
     │   └── test
     │       └── groovy          # specs
     └── build.gradle            # build file
-
-# Script Examples
-
-* [Example 1](src/jobs/example1Jobs.groovy) - shows basic folder/job creation
-* [Example 2](src/jobs/example2Jobs.groovy) - shows how to create a set of jobs for each github branch, each in its own folder
-* [Example 3](src/jobs/example3Jobs.groovy) - shows how to use the configure block
-* [Example 4](src/jobs/example4Jobs.groovy) - shows a way to reuse job definitions for jobs that differ only with a few properties
-* [Example 5](src/jobs/example5Jobs.groovy) - shows how to pull out common components into static methods
-* [Example 6](src/jobs/example6Jobs.groovy) - shows how to include script resources from the workspace
-* [Example 7](src/jobs/example7Jobs.groovy) - shows how to create jobs using builders
-* [Example 8](src/jobs/example8Jobs.groovy) - shows how to use DSL extensions provided by other plugins
-
-## Testing
-
-`./gradlew test` runs the specs.
-
-[JobScriptsSpec](src/test/groovy/com/dslexample/JobScriptsSpec.groovy) 
-will loop through all DSL files and make sure they don't throw any exceptions when processed. All XML output files are written to `build/debug-xml`. 
-This can be useful if you want to inspect the generated XML before check-in. Plugins providing auto-generated DSL must be added to the build dependencies.
-
-If you prefer to stub the auto-generated DSL, you can use [JobScriptsSpecAlternative](src/test/groovy/com/dslexample/JobScriptsSpecAlternative.groovy),
-though you may miss some syntax errors.
 
 ## Seed Job
 
