@@ -1699,6 +1699,47 @@ Option Parser Parameters:
       }
     }
   }
+  static void secretManagerSetup( def job, String environment, String site, String checkoutBranch) {
+    job.with {
+      description("This job will configure all AWS secret manager secrets needed for a new or updated environment/site.")
+      keepDependencies(false)
+      disabled(false)
+      concurrentBuild(false)
+      steps {
+        downstreamParameterized {
+          trigger("secrets-manager-setup") {
+            block {
+              buildStepFailure("FAILURE")
+              unstable("UNSTABLE")
+              failure("FAILURE")
+            }
+            parameters {
+              predefinedProp("BRANCH", "$checkoutBranch")
+              predefinedProp("ENVIRONMENT", "$environment")
+              predefinedProp("SITE", "$site")
+            }
+          }
+        }
+      }
+      publishers {
+        mailer("devops@stayntouch.com", false, true)
+      }
+      configure {
+        it / 'properties' / 'jenkins.model.BuildDiscarderProperty' {
+          strategy {
+            'daysToKeep'('3')
+            'numToKeep'('-1')
+            'artifactDaysToKeep'('-1')
+            'artifactNumToKeep'('-1')
+          }
+        }
+        it / 'properties' / 'com.sonyericsson.rebuild.RebuildSettings' {
+          'autoRebuild'('false')
+          'rebuildDisabled'('false')
+        }
+      }
+    }
+  }
 
 // class close
 }

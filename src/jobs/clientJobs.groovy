@@ -52,6 +52,11 @@ for (environment in environmentlist) {
   def restartFolder = folder("restart-services-$environment.key")
   Templates.restartFolderSetup(restartFolder, "$environment.key")
 
+  // Secret manager job setup
+
+  def secretManagerJob = job("secrets-manager-setup-$environment.key")
+  Templates.secretManagerSetup(secretManagerJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+
   // Chef Setup auth Server
   if(!environment.key.equals("prodtest"))
   {
@@ -121,10 +126,9 @@ for (environment in environmentlist) {
 
     def rakeWebhookJob = job("rake-task-$environment.key/run-rake-task-webhook-$environment.key")
     Templates.rakeWebhookSetup(rakeWebhookJob , "$environment.key", environment.value.get('site'), environment.value.get('branch'))
-}
 
-  if(!environment.key.equals("prodtest"))
-  {
+  // Restart Jobs
+
     def restartAuthAppJob = job("restart-services-$environment.key/restart-auth-app-$environment.key")
     Templates.restartJobSetup(restartAuthAppJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'), "auth", "app")
 
