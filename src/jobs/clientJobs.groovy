@@ -200,8 +200,8 @@ for (environment in environmentlist) {
   }
   if(environment.key.equals("awsstage") || environment.key.equals("prod") || environment.key.equals("prodeu") || environment.key.equals("prodtest"))
   {
-    def excavatorCopyJob = job("utilities-$environment.key/excavator-copy-$environment.key")
-    Templates.excavatorCopy(excavatorCopyJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
+    def excavatorCopyForEnvJob = job("utilities-$environment.key/excavator-copy-$environment.key")
+    Templates.excavatorCopyForEnv(excavatorCopyForEnvJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
   }
   if(environment.key.equals("awsstage") || environment.key.equals("release"))
   {

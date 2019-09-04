@@ -1834,7 +1834,7 @@ It will keep the last 7 days snapshots""")
       }
     }
   }
-  static void excavatorCopy( def job, String environment, String site, String checkoutBranch) {
+  static void excavatorCopyForEnv( def job, String environment, String site, String checkoutBranch) {
     job.with {
       description("Deploy Chef cookbooks for staging environment using")
       keepDependencies(false)
