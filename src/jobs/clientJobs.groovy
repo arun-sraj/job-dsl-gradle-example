@@ -203,7 +203,7 @@ for (environment in environmentlist) {
     def excavatorCopyForEnvJob = job("utilities-$environment.key/excavator-copy-$environment.key")
     Templates.excavatorCopyForEnv(excavatorCopyForEnvJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
   }
-  if(environment.key.equals("awsstage") || environment.key.equals("release"))
+  if(environment.key.equals("awsstage") || environment.key.equals("release") || environment.key.equals("uat"))
   {
     def exportMysqlJob = job("utilities-$environment.key/export-mysql-$environment.key")
     Templates.exportMysql(exportMysqlJob, "$environment.key", environment.value.get('site'), environment.value.get('branch'))
