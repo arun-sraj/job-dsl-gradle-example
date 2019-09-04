@@ -187,7 +187,7 @@ for (environment in environmentlist) {
       filterBuildQueue()
       filterExecutors()
       jobs {
-          names("aws-account-setup-$environment.key", "chef-setup-$environment.key", "deploy-$environment.key", "infrastructure-setup-$environment.key", "rake-task-$environment.key", "restart-services-$environment.key")
+          names("aws-account-setup-$environment.key", "chef-setup-$environment.key", "deploy-$environment.key", "infrastructure-setup-$environment.key", "rake-task-$environment.key", "restart-services-$environment.key", "secrets-manager-setup-$environment.key")
       }
       columns {
           status()
